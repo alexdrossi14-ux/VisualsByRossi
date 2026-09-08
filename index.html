@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0b0c">
 <title>Visuals By Rossi - Design Archive</title>
 <meta name="description" content="Sports, streamer and brand graphics by Rossi - 558 pieces across 14 sets, 25-26.">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -28,13 +29,18 @@
     --ease:cubic-bezier(.16,1,.3,1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{-webkit-font-smoothing:antialiased;background:var(--bg)}
+  html{-webkit-font-smoothing:antialiased;background:var(--bg);color-scheme:dark}
+  body{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.55;
     overflow-x:clip;font-synthesis:none}
   ::selection{background:var(--sig);color:var(--sig-ink)}
   a{color:inherit;text-decoration:none}
   img{display:block}
   :focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:2px}
+  .skip{position:fixed;top:8px;left:8px;z-index:200;background:var(--ink);color:var(--bg);
+    font-family:var(--mono);font-size:12px;padding:8px 12px;border-radius:6px;
+    transform:translateY(-150%);transition:transform .15s}
+  .skip:focus{transform:none}
 
   /* film grain + broadcast viewfinder frame */
   .grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
@@ -379,6 +385,7 @@
 </style>
 </head>
 <body>
+<a class="skip" href="#view">Skip to work</a>
 <div class="grain" aria-hidden="true"></div>
 <div class="vf" aria-hidden="true"><b></b><b></b><b></b><b></b></div>
 
@@ -395,7 +402,7 @@
 </header>
 
 
-<main id="view"></main>
+<main id="view" tabindex="-1"></main>
 
 <footer>
   <div>
@@ -684,7 +691,7 @@ function tile(it){
   const a=document.createElement('div');a.className='tile'+(it.v?' vid':'');a.dataset.id=it.id;
   const media = it.v
     ? `<video muted loop playsinline preload="metadata" poster="${THUMB(it.id)}"><source src="vid/${it.id}.mp4" type="video/mp4"></video><span class="motion">&#9654; Motion</span>`
-    : `<img loading="lazy" decoding="async" src="${THUMB(it.id)}" alt="">`;
+    : `<img loading="lazy" decoding="async" width="${it.w}" height="${it.h}" src="${THUMB(it.id)}" alt="">`;
   a.innerHTML=`<figure style="aspect-ratio:${it.w}/${it.h}">${media}</figure>`;
   io.observe(a);return a;
 }
@@ -714,7 +721,7 @@ function renderCategory(c){
   const idx=CATS.indexOf(c);
   view.innerHTML=`
    <section class="cat-hero" style="--gc:${c.color}" data-mark="${esc(c.name)}">
-     <button class="back" id="back">&lsaquo; All sets</button>
+     <a class="back" id="back" href="#/">&lsaquo; All sets</a>
      <div class="cat-title"><span class="ci">${pad2(idx+1)}</span><h2>${esc(c.name)}</h2></div>
      <div class="cat-sub"><span>${c.count} pieces</span><span>Newest &rarr; earliest</span></div>
    </section>
@@ -729,7 +736,6 @@ function renderCategory(c){
      </div>
    </div>
    <div class="grid-wrap" style="--gc:${c.color}"><div id="grid"></div><div id="sentinel" style="height:1px"></div></div>`;
-  document.getElementById('back').onclick=()=>{location.hash='';};
   document.getElementById('filters').onclick=e=>{
     const b=e.target.closest('button[data-s]'); if(!b) return;
     fShape=b.dataset.s;
