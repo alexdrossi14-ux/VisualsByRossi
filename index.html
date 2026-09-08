@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Visuals By Rossi - Design Archive</title>
+<meta name="description" content="Sports, streamer and brand graphics by Rossi - 637 pieces across 15 sets, 25-26.">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="preload" as="image" href="img/1365.webp" fetchpriority="high">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300..900;1,400..800&family=Archivo+Expanded:wght@500..900&family=Fraunces:ital,opsz,wght@1,9..144,300..600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0b0c; --bg-2:#101012; --panel:#141417; --panel-2:#191a1e;
+    --line:#26262b; --line-2:#33333a;
+    --ink:#f3f1ea; --dim:#9a978d; --faint:#8a887e;
+    --sig:#8b7dff; --sig-ink:#0b0b0c;
+    --live:#8b7dff;                 /* swings to the focused set's colour in the strip */
+    --edge:clamp(16px,4.5vw,68px);
+    --gap:clamp(12px,1.8vw,24px);
+    --barh:58px;
+    --disp:"Archivo Expanded","Archivo",sans-serif;
+    --sans:"Archivo",-apple-system,system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+    --ease:cubic-bezier(.16,1,.3,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-font-smoothing:antialiased;background:var(--bg)}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.55;
+    overflow-x:clip;font-synthesis:none}
+  ::selection{background:var(--sig);color:var(--sig-ink)}
+  a{color:inherit;text-decoration:none}
+  img{display:block}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:2px}
+
+  /* film grain + broadcast viewfinder frame */
+  .grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .vf{position:fixed;inset:0;z-index:55;pointer-events:none}
+  .vf b{position:absolute;width:14px;height:14px;border:2px solid var(--dim);opacity:.5}
+  .vf b:nth-child(1){top:14px;left:14px;border-right:0;border-bottom:0}
+  .vf b:nth-child(2){top:14px;right:14px;border-left:0;border-bottom:0}
+  .vf b:nth-child(3){bottom:14px;left:14px;border-right:0;border-top:0}
+  .vf b:nth-child(4){bottom:14px;right:14px;border-left:0;border-top:0}
+  @media(max-width:640px){.vf{display:none}}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.001ms!important;animation-iteration-count:1!important;
+      transition-duration:.001ms!important;scroll-behavior:auto!important}
+  }
+  @media (hover:none){
+    .cat:hover,.tile:hover figure,.cat:hover .cover img,.tile:hover img,
+    .reel-tr .sh:hover img,.row:hover .nm,
+    .strip-head .open:hover span{transform:none}
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;
+    height:var(--barh);padding:0 var(--edge);
+    background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(16px) saturate(1.2);
+    border-bottom:1px solid var(--line)}
+  .topbar .sp-line{position:absolute;left:0;bottom:-1px;height:2px;width:100%;
+    background:var(--live);transform:scaleX(var(--sp,0));transform-origin:0 50%;
+    transition:background-color .5s linear}
+  .brand{display:flex;align-items:center;gap:11px}
+  .brand img{width:24px;height:24px;object-fit:contain}
+  .brand b{font-family:var(--disp);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+  .topbar .mark{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--faint);padding-left:6px;border-left:1px solid var(--line-2)}
+  .topbar .sp{flex:1}
+  .topbar .ig{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--dim);border-bottom:1px solid transparent}
+  .topbar .ig:hover{color:var(--ink);border-color:var(--sig)}
+  .topbar .live{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+  .topbar .live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--live);
+    box-shadow:0 0 0 0 var(--live);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(139,125,255,.5)}70%{box-shadow:0 0 0 7px rgba(139,125,255,0)}100%{box-shadow:0 0 0 0 rgba(139,125,255,0)}}
+  @media(max-width:760px){.topbar .mark{display:none}}
+  @media(max-width:560px){.topbar .live span{display:none}}
+
+  /* ---------- ticker ---------- */
+  .ticker{overflow:hidden;border-bottom:1px solid var(--line);background:var(--bg-2);
+    -webkit-mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+    mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+  .ticker-tr{display:inline-flex;gap:0;white-space:nowrap;padding:9px 0;animation:march 64s linear infinite}
+  .ticker:hover .ticker-tr{animation-play-state:paused}
+  @keyframes march{to{transform:translateX(-50%)}}
+  .tk{display:inline-flex;align-items:center;gap:10px;padding:0 26px;font-family:var(--mono);font-size:10.5px;letter-spacing:.04em}
+  .tk i{font-style:normal;color:var(--dim)}
+  .tk em{font-style:normal;color:var(--faint)}
+  .tk::after{content:"\2022";color:var(--sig);margin-left:16px}
+
+  main{position:relative;z-index:1}
+
+  /* ---------- hero ----------
+     Contrast: the plate image is knocked down with brightness(.42) and then sat
+     under a >=.70 alpha wash, so even a pure-white graphic lands near #2f2f2f.
+     --ink reads ~11:1 and --dim ~4.6:1 against that worst case. */
+  .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;
+    justify-content:flex-end;padding:clamp(90px,14vh,150px) var(--edge) clamp(64px,11vh,120px);
+    border-bottom:1px solid var(--line);overflow:hidden;isolation:isolate}
+  .plate{position:absolute;inset:-10% 0;z-index:-1;overflow:hidden}
+  .plate img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;
+    filter:saturate(.85) contrast(1.06) brightness(.42);
+    transform:translate3d(0,var(--py,0px),0) scale(1.14);will-change:transform}
+  .plate .hue{position:absolute;inset:0;background:var(--sig);mix-blend-mode:color}
+  .plate .mul{position:absolute;inset:0;background:var(--sig);mix-blend-mode:multiply;opacity:.42}
+  .plate .wash{position:absolute;inset:0;background:
+    linear-gradient(180deg,rgba(11,11,12,.74),rgba(11,11,12,.70) 46%,rgba(11,11,12,.97)),
+    linear-gradient(90deg,rgba(11,11,12,.80),rgba(11,11,12,.42) 62%,rgba(11,11,12,.15))}
+  .hero-in{position:relative;transform:translate3d(0,var(--ty,0px),0);opacity:var(--to,1)}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);
+    display:flex;align-items:center;gap:12px;overflow:hidden}
+  .eyebrow span{display:inline-block;transform:translateY(110%);animation:up .6s .05s var(--ease) forwards}
+  .eyebrow::after{content:"";flex:1;height:1px;background:var(--line-2);max-width:120px}
+  h1.big{font-family:var(--disp);font-weight:800;font-size:clamp(52px,13vw,190px);line-height:.86;
+    letter-spacing:-.02em;text-transform:uppercase;margin:.28em 0 0}
+  h1.big .ln{display:block;overflow:hidden}
+  h1.big .ln span{display:block;transform:translateY(105%);animation:up .68s var(--ease) forwards}
+  h1.big .ln:nth-child(1) span{animation-delay:.10s}
+  h1.big .ln:nth-child(2) span{animation-delay:.20s}
+  h1.big em{font-family:"Fraunces",Georgia,serif;font-style:italic;font-weight:400;letter-spacing:-.005em;
+    color:var(--sig);text-transform:none;padding-right:.08em}
+  @keyframes up{to{transform:translateY(0)}}
+  .lede{margin-top:34px;max-width:46ch;color:var(--dim);font-size:clamp(14px,1.5vw,17px);
+    opacity:0;animation:fade .55s .42s forwards}
+  @keyframes fade{to{opacity:1}}
+  .board{margin-top:44px;display:flex;gap:clamp(26px,5vw,64px);flex-wrap:wrap;
+    opacity:0;animation:fade .55s .52s forwards}
+  .board .st{display:flex;flex-direction:column;gap:4px}
+  .board .st b{font-family:var(--disp);font-weight:800;font-size:clamp(30px,4.4vw,48px);letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums}
+  .board .st i{font-family:var(--mono);font-style:normal;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  .cue{position:absolute;left:var(--edge);bottom:22px;display:flex;align-items:center;gap:10px;
+    font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);
+    opacity:var(--co,1);transition:opacity .3s}
+  .cue i{display:block;width:1px;height:26px;background:linear-gradient(180deg,var(--faint),transparent);
+    animation:drop 1.9s var(--ease) infinite}
+  @keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}
+    51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+  /* ---------- ACT II: the strip ----------
+     Ported from 21st.dev "Hero Carousel" (crafterui): every card shares one top
+     edge, the focused card unfurls to full height while neighbours stay clipped
+     to half, and the backdrop re-grades to the focused set's colour.
+     Two changes from the original: focus is driven by scroll position through a
+     sticky runway rather than by hijacking the wheel, and the unfurl is a
+     clip-path inset instead of an animated height, so nothing ever re-lays-out.
+
+     Contrast: mono micro-labels sit only in the top (>=.80) and bottom (>=.90)
+     wash bands. The mid band is .55 and carries display type only, which is
+     large text (3:1 floor) and measures ~11:1 against the worst-case plate. */
+  .strip{position:relative}
+  .strip-stick{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;isolation:isolate}
+  .sbg{position:absolute;inset:-8%;z-index:-2}
+  .sbg img{width:100%;height:100%;object-fit:cover;
+    filter:blur(40px) saturate(.8) brightness(.38);transform:scale(1.15)}
+  .sbg.b{opacity:var(--xf,0)}
+  .shue{position:absolute;inset:0;z-index:-2;background:var(--live);mix-blend-mode:color}
+  .smul{position:absolute;inset:0;z-index:-2;background:var(--live);mix-blend-mode:multiply;opacity:.45}
+  .swash{position:absolute;inset:0;z-index:-1;background:
+    linear-gradient(180deg,rgba(11,11,12,.86) 0%,rgba(11,11,12,.55) 30%,
+      rgba(11,11,12,.55) 52%,rgba(11,11,12,.90) 76%,rgba(11,11,12,.97) 100%)}
+
+  .strip-kick{position:absolute;left:var(--edge);right:var(--edge);top:clamp(70px,9vh,104px);
+    display:flex;justify-content:space-between;gap:16px;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+
+  .strip-head{position:absolute;left:var(--edge);right:var(--edge);top:0;height:44%;
+    display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:clamp(14px,2.4vh,26px);
+    pointer-events:none}
+  .strip-head .ttl{font-family:var(--disp);font-weight:800;line-height:.88;letter-spacing:-.03em;
+    text-transform:uppercase;font-size:clamp(38px,7.4vw,104px);max-width:16ch}
+  .strip-head .ttl .ln{display:block;overflow:hidden}
+  .strip-head .ttl .ln span{display:block;animation:up .62s var(--ease) both}
+  .strip-head .row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:16px;
+    pointer-events:auto}
+  .strip-head .open{display:inline-flex;align-items:center;gap:9px;min-height:44px;padding:11px 18px;
+    border:1px solid var(--line-2);border-radius:999px;
+    background:color-mix(in srgb,var(--bg) 74%,transparent);backdrop-filter:blur(10px);
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+    transition:border-color .25s,background-color .25s}
+  .strip-head .open:hover{border-color:var(--live);background:color-mix(in srgb,var(--bg) 88%,transparent)}
+  .strip-head .open span{transition:transform .25s var(--ease)}
+  .strip-head .open:hover span{transform:translateX(4px)}
+  .strip-head .cnt{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink);text-shadow:0 1px 10px rgba(11,11,12,.9)}
+
+  .strip-wrap{position:absolute;left:0;right:0;top:44%;height:var(--fullh,300px)}
+  .strip-track{display:flex;align-items:flex-start;gap:var(--sgap,12px);will-change:transform}
+  .scard{position:relative;flex:0 0 auto;width:var(--cardw,225px);height:var(--fullh,300px);
+    border:0;padding:0;background:#000;overflow:hidden;cursor:pointer;
+    clip-path:inset(0 0 var(--cut,50%) 0 round 5px)}
+  .strip.live .scard{will-change:clip-path}
+  .scard img{width:100%;height:100%;object-fit:cover;object-position:50% 32%;
+    filter:grayscale(.22) contrast(1.04)}
+  .scard .sd{position:absolute;inset:0;background:#0b0b0c;opacity:var(--dim2,.16);pointer-events:none}
+  .scard .sn{position:absolute;left:0;right:0;bottom:0;padding:10px 11px;text-align:left;
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);
+    background:linear-gradient(180deg,transparent,rgba(11,11,12,.9));
+    opacity:var(--nm,0);pointer-events:none;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .scard:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+  .strip-rail{position:absolute;left:var(--edge);bottom:clamp(20px,3.6vh,38px);width:min(260px,36vw)}
+  .strip-rail .n{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.14em;color:var(--ink);font-variant-numeric:tabular-nums}
+  .strip-rail .tr{position:relative;margin-top:8px;height:1px;background:rgba(243,241,234,.28)}
+  .strip-rail .tr i{position:absolute;inset:0;background:var(--ink);
+    transform:scaleX(var(--rp,0));transform-origin:0 50%}
+  .strip-hint{position:absolute;right:var(--edge);bottom:clamp(20px,3.6vh,38px);
+    font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+
+  /* static fallback: phones, and anyone who asked for reduced motion.
+     No pin, no runway, no scrub - a plain swipeable snap rail. */
+  .strip.static{height:auto!important}
+  .strip.static .strip-stick{position:static;height:auto;padding:clamp(40px,8vh,80px) 0 clamp(28px,5vh,48px)}
+  .strip.static .sbg,.strip.static .shue,.strip.static .smul{display:none}
+  .strip.static .swash{display:none}
+  .strip.static .strip-kick,.strip.static .strip-hint{position:static;padding:0 var(--edge);margin-bottom:18px}
+  .strip.static .strip-hint{display:none}
+  .strip.static .strip-head{position:static;height:auto;padding:0 var(--edge) 22px}
+  .strip.static .strip-head .ttl{font-size:clamp(30px,9vw,52px)}
+  .strip.static .strip-wrap{position:static;height:auto;
+    overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+    padding:0 var(--edge) 18px;scrollbar-width:none}
+  .strip.static .strip-wrap::-webkit-scrollbar{display:none}
+  .strip.static .strip-track{transform:none!important}
+  .strip.static .scard{clip-path:inset(0 0 0 0 round 5px)!important;scroll-snap-align:center;
+    width:clamp(170px,52vw,240px);height:clamp(226px,69vw,320px)}
+  .strip.static .scard .sd{opacity:0!important}
+  .strip.static .scard .sn{opacity:1!important}
+  .strip.static .strip-rail{position:static;padding:0 var(--edge);width:auto}
+
+  /* ---------- ACT III: selected reel ----------
+     The marquee keeps its own autoplay; scroll adds a drift on the wrapper, so
+     the two compose instead of fighting over one transform. */
+  .reel{position:relative;padding:clamp(28px,5vw,56px) 0;border-bottom:1px solid var(--line);overflow:hidden;
+    -webkit-mask:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);
+    mask:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+  .reel .rl{position:absolute;left:var(--edge);top:14px;z-index:2;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+  .reel .rl:hover{color:var(--ink)}
+  .reel-drift{transform:translate3d(var(--dx,0px),0,0)}
+  .reel-tr{display:inline-flex;gap:14px;padding-top:16px;animation:march 70s linear infinite}
+  .reel:hover .reel-tr{animation-play-state:paused}
+  .reel-tr .sh{position:relative;flex:0 0 auto;width:clamp(150px,17vw,230px);aspect-ratio:4/5;
+    border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#000;cursor:pointer;
+    transition:border-color .3s}
+  .reel-tr .sh img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1),filter .4s;
+    filter:grayscale(.15) contrast(1.02)}
+  .reel-tr .sh:hover{border-color:var(--sig)}
+  .reel-tr .sh:hover img{transform:scale(1.06);filter:none}
+
+  /* ---------- ACT IV: the sets ---------- */
+  .wrap{padding:clamp(40px,7vw,92px) var(--edge) clamp(60px,12vw,150px)}
+  .sec-head{position:sticky;top:var(--barh);z-index:20;
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);
+    padding:14px 0;border-bottom:1px solid var(--line);margin-bottom:var(--gap);
+    background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px)}
+  @keyframes rowin{to{opacity:1;transform:none}}
+  .cats{display:grid;gap:var(--gap);grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr))}
+  .cat{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    overflow:hidden;opacity:0;transform:translateY(20px);
+    transition:transform .28s cubic-bezier(.2,.7,.2,1),border-color .28s}
+  .cat.in{animation:rowin .6s var(--ease) forwards}
+  .cat::after{content:"";position:absolute;inset:0;border-radius:16px;pointer-events:none;opacity:0;
+    box-shadow:0 0 0 1px color-mix(in srgb,var(--gc,#8b7dff) 60%,transparent) inset,
+      0 30px 60px -24px color-mix(in srgb,var(--gc,#8b7dff) 60%,#000);
+    transition:opacity .28s}
+  .cat:hover{transform:translateY(-5px);border-color:var(--line-2)}
+  .cat:hover::after{opacity:1}
+  .cat .cover{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:1px;
+    aspect-ratio:5/4;background:#000;overflow:hidden}
+  .cat .cover img{width:100%;height:100%;object-fit:cover;display:block;
+    filter:grayscale(.14) contrast(1.02);transition:transform .6s cubic-bezier(.2,.7,.2,1),filter .4s}
+  .cat:hover .cover img{transform:scale(1.05);filter:none}
+  .cat .cover.one{grid-template-columns:1fr}
+  .cat .cover.one img{object-fit:contain;background:#000}
+  .cat .cbar{height:3px;background:var(--gc,var(--sig))}
+  .cat .label{display:grid;grid-template-columns:auto 1fr auto;align-items:baseline;gap:11px;padding:15px 17px 17px}
+  .cat .label .idx{font-family:var(--mono);font-size:11px;color:var(--faint)}
+  .cat .label .nm{font-family:var(--disp);font-weight:750;font-size:clamp(15px,1.8vw,19px);letter-spacing:-.01em;
+    text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .cat .label .ct{font-family:var(--mono);font-size:11.5px;color:var(--dim);white-space:nowrap}
+  .cat .label .ct b{color:var(--ink)}
+
+  /* ---------- category page ---------- */
+  .cat-hero{position:relative;padding:clamp(26px,4vw,44px) var(--edge) clamp(22px,3.5vw,38px);
+    border-bottom:1px solid var(--line);overflow:hidden}
+  .cat-hero::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--gc)}
+  .cat-hero::after{content:"";position:absolute;right:-6%;top:-60%;width:44%;height:220%;
+    background:radial-gradient(closest-side,color-mix(in srgb,var(--gc) 24%,transparent),transparent 72%);
+    filter:blur(24px);pointer-events:none}
+  .back{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+    background:none;border:0;padding:8px 0;min-height:44px;display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+  .back:hover{color:var(--sig)}
+  .cat-title{display:flex;align-items:flex-end;gap:clamp(14px,2.5vw,30px);margin-top:6px;flex-wrap:wrap}
+  .cat-title .ci{font-family:var(--mono);font-size:13px;color:var(--faint);padding-bottom:.6em}
+  .cat-title h2{font-family:var(--disp);font-weight:800;font-size:clamp(34px,7vw,86px);line-height:.9;
+    letter-spacing:-.025em;text-transform:uppercase}
+  .cat-sub{margin-top:14px;display:flex;gap:18px;font-family:var(--mono);font-size:11px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--dim);flex-wrap:wrap;align-items:center}
+
+  /* filters stay reachable for the whole set - it can be 185 pieces long */
+  .filterbar{position:sticky;top:var(--barh);z-index:22;padding:11px var(--edge);
+    border-bottom:1px solid var(--line);
+    background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px) saturate(1.2);
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .filterbar .setname{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--faint);white-space:nowrap;opacity:var(--fo,0);transition:opacity .3s}
+  .filterbar .prog{position:absolute;left:0;bottom:-1px;height:2px;width:100%;background:var(--gc);
+    transform:scaleX(var(--cp,0));transform-origin:0 50%}
+  .filters{display:flex;gap:7px;flex-wrap:wrap}
+  .filters button{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--dim);background:var(--panel);border:1px solid var(--line);border-radius:6px;
+    padding:9px 14px;min-height:38px;cursor:pointer;transition:border-color .2s,color .2s}
+  .filters button:hover{border-color:var(--line-2);color:var(--ink)}
+  .filters button.on{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:600}
+
+  .grid-wrap{padding:clamp(26px,4vw,48px) var(--edge) clamp(60px,12vw,140px)}
+  #grid{display:flex;gap:var(--gap);align-items:flex-start}
+  .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--gap)}
+  .tile{cursor:pointer;opacity:0;transform:translateY(16px)}
+  .tile.in{animation:rowin .6s var(--ease) forwards}
+  .tile figure{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    overflow:hidden;transition:border-color .26s,transform .26s cubic-bezier(.2,.7,.2,1)}
+  .tile figure::after{content:"";position:absolute;inset:0;border-radius:10px;pointer-events:none;opacity:0;
+    box-shadow:0 24px 48px -22px color-mix(in srgb,var(--gc) 60%,#000);transition:opacity .26s}
+  .tile img,.tile video{display:block;width:100%;height:auto;
+    transition:transform .5s cubic-bezier(.2,.7,.2,1),filter .3s;filter:grayscale(.12) contrast(1.02)}
+  .tile:hover figure{border-color:var(--gc);transform:translateY(-3px)}
+  .tile:hover figure::after{opacity:1}
+  .tile:hover img,.tile:hover video{transform:scale(1.045);filter:none}
+  .tile .motion{position:absolute;left:10px;bottom:10px;z-index:2;
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink);background:color-mix(in srgb,var(--bg) 62%,transparent);backdrop-filter:blur(6px);
+    border:1px solid var(--line-2);border-radius:5px;padding:3px 7px}
+  .empty{padding:80px 0;text-align:center;color:var(--faint);font-family:var(--mono);
+    font-size:11px;letter-spacing:.2em;text-transform:uppercase}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--line);padding:clamp(56px,10vw,130px) var(--edge);
+    display:grid;grid-template-columns:1fr auto;gap:36px;align-items:end;position:relative}
+  footer .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+  footer .big{font-family:var(--disp);font-weight:800;font-size:clamp(30px,6vw,72px);line-height:.92;
+    letter-spacing:-.03em;text-transform:uppercase;margin-top:16px;max-width:12ch}
+  footer .big em{font-family:"Fraunces",serif;font-style:italic;font-weight:400;text-transform:none;color:var(--sig)}
+  footer .contact{text-align:right;display:flex;flex-direction:column;gap:12px;align-items:flex-end}
+  footer .contact a.mail{font-family:var(--disp);font-weight:700;font-size:clamp(15px,2vw,20px);
+    border-bottom:2px solid var(--sig);padding-bottom:3px}
+  footer .contact a.mail:hover{color:var(--sig)}
+  footer .contact .socials{display:flex;gap:16px}
+  footer .contact .socials a{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+  footer .contact .socials a:hover{color:var(--sig)}
+  @media(max-width:700px){footer{grid-template-columns:1fr}footer .contact{text-align:left;align-items:flex-start}}
+
+  /* ---------- lightbox ---------- */
+  #lb{position:fixed;inset:0;z-index:120;background:rgba(6,6,7,.96);display:none;
+    align-items:center;justify-content:center;padding:clamp(18px,5vw,72px);backdrop-filter:blur(8px)}
+  #lb.on{display:flex}
+  #lb img,#lb video{max-width:100%;max-height:100%;object-fit:contain;border-radius:6px;
+    box-shadow:0 60px 160px -40px #000,0 0 0 1px rgba(255,255,255,.06)}
+  #lb video[hidden],#lb img[hidden]{display:none}
+  #lb .meta{position:absolute;left:0;right:0;bottom:0;padding:20px clamp(18px,5vw,72px);
+    display:flex;justify-content:space-between;gap:20px;font-family:var(--mono);font-size:11px;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+  #lb button{position:absolute;background:none;border:0;color:var(--dim);font-family:var(--disp);
+    font-weight:700;cursor:pointer;font-size:22px;line-height:1;min-width:44px;min-height:44px}
+  #lb button:hover{color:var(--sig)}
+  #lb .x{top:18px;right:22px}
+  #lb .nav{top:50%;transform:translateY(-50%);font-size:30px;padding:18px}
+  #lb .prev{left:6px} #lb .next{right:6px}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="vf" aria-hidden="true"><b></b><b></b><b></b><b></b></div>
+
+<header class="topbar">
+  <i class="sp-line" aria-hidden="true"></i>
+  <a class="brand" id="home" href="#/">
+    <img src="logo.webp" alt="" onerror="this.style.display='none'">
+    <b>Visuals By Rossi</b>
+  </a>
+  <span class="mark" id="mark" aria-hidden="true"></span>
+  <span class="sp"></span>
+  <a class="ig" href="https://www.instagram.com/visualsbyrossi/" target="_blank" rel="noopener">Instagram</a>
+  <span class="live"><span>637 indexed &mdash; 25-26</span></span>
+</header>
+
+<div class="ticker" aria-hidden="true"><div class="ticker-tr"><span class="tk"><i>MOTION 1367</i><em>Sep 2026</em></span><span class="tk"><i>FULEST</i><em>Sep 2026</em></span><span class="tk"><i>NITRO CAMDEN X DESHAE FROST</i><em>Sep 2026</em></span><span class="tk"><i>BONDING OUT BADDIES 2</i><em>Sep 2026</em></span><span class="tk"><i>REGGIE THUMBNAIL</i><em>Sep 2026</em></span><span class="tk"><i>NITROOOOO</i><em>Sep 2026</em></span><span class="tk"><i>HITATHN 2</i><em>Sep 2026</em></span><span class="tk"><i>ADIN ROSS X NITRO CAM</i><em>Sep 2026</em></span><span class="tk"><i>STREAMER ISLAND</i><em>Sep 2026</em></span><span class="tk"><i>ISLAND</i><em>Sep 2026</em></span><span class="tk"><i>ISNALD</i><em>Sep 2026</em></span><span class="tk"><i>HOUSE</i><em>Sep 2026</em></span><span class="tk"><i>SSSSSSSSSSS</i><em>Sep 2026</em></span><span class="tk"><i>S</i><em>Sep 2026</em></span><span class="tk"><i>SPONS</i><em>Sep 2026</em></span><span class="tk"><i>CAST AND CREW</i><em>Sep 2026</em></span><span class="tk"><i>COLLAGE STREAM</i><em>Sep 2026</em></span><span class="tk"><i>SUPRISE ISLAND</i><em>Sep 2026</em></span><span class="tk"><i>SUPRISE</i><em>Sep 2026</em></span><span class="tk"><i>24 HOUR</i><em>Sep 2026</em></span><span class="tk"><i>LOVE</i><em>Sep 2026</em></span><span class="tk"><i>SPONSERS</i><em>Sep 2026</em></span><span class="tk"><i>HOST SPECIAL</i><em>Sep 2026</em></span><span class="tk"><i>STREAM SPONSERS</i><em>Sep 2026</em></span><span class="tk"><i>MOTION 1367</i><em>Sep 2026</em></span><span class="tk"><i>FULEST</i><em>Sep 2026</em></span><span class="tk"><i>NITRO CAMDEN X DESHAE FROST</i><em>Sep 2026</em></span><span class="tk"><i>BONDING OUT BADDIES 2</i><em>Sep 2026</em></span><span class="tk"><i>REGGIE THUMBNAIL</i><em>Sep 2026</em></span><span class="tk"><i>NITROOOOO</i><em>Sep 2026</em></span><span class="tk"><i>HITATHN 2</i><em>Sep 2026</em></span><span class="tk"><i>ADIN ROSS X NITRO CAM</i><em>Sep 2026</em></span><span class="tk"><i>STREAMER ISLAND</i><em>Sep 2026</em></span><span class="tk"><i>ISLAND</i><em>Sep 2026</em></span><span class="tk"><i>ISNALD</i><em>Sep 2026</em></span><span class="tk"><i>HOUSE</i><em>Sep 2026</em></span><span class="tk"><i>SSSSSSSSSSS</i><em>Sep 2026</em></span><span class="tk"><i>S</i><em>Sep 2026</em></span><span class="tk"><i>SPONS</i><em>Sep 2026</em></span><span class="tk"><i>CAST AND CREW</i><em>Sep 2026</em></span><span class="tk"><i>COLLAGE STREAM</i><em>Sep 2026</em></span><span class="tk"><i>SUPRISE ISLAND</i><em>Sep 2026</em></span><span class="tk"><i>SUPRISE</i><em>Sep 2026</em></span><span class="tk"><i>24 HOUR</i><em>Sep 2026</em></span><span class="tk"><i>LOVE</i><em>Sep 2026</em></span><span class="tk"><i>SPONSERS</i><em>Sep 2026</em></span><span class="tk"><i>HOST SPECIAL</i><em>Sep 2026</em></span><span class="tk"><i>STREAM SPONSERS</i><em>Sep 2026</em></span></div></div>
+
+<main id="view"></main>
+
+<footer>
+  <div>
+    <div class="k">Commissions open</div>
+    <p class="big">Make something <em>worth</em> screenshotting.</p>
+  </div>
+  <div class="contact">
+    <a class="mail" href="mailto:alexdrossi14@gmail.com">alexdrossi14@gmail.com</a>
+    <span class="socials">
+      <a href="https://www.instagram.com/visualsbyrossi/" target="_blank" rel="noopener">Instagram</a>
+    </span>
+  </div>
+</footer>
+
+<div id="lb" role="dialog" aria-modal="true" aria-label="Piece viewer">
+  <button class="x" aria-label="Close">&times;</button>
+  <button class="nav prev" aria-label="Previous">&lsaquo;</button>
+  <img id="lbimg" alt="">
+  <video id="lbvid" playsinline controls loop hidden></video>
+  <button class="nav next" aria-label="Next">&rsaquo;</button>
+  <div class="meta"><span id="lbtitle"></span><span id="lbpos"></span></div>
+</div>
+
+<script>
+const CATS = [{"id":"g1788637708644","name":"BEA 7V7","color":"#d35400","count":185,"cover":["1029","0349","1037","0484","0483"],"items":[{"id":"1029","t":"7v7 by the numbers","w":656,"h":820,"d":"Jul 2026"},{"id":"0349","t":"bea7 promo","w":656,"h":820,"d":"Jun 2026"},{"id":"1037","t":"rankings bea","w":656,"h":820,"d":"May 2026"},{"id":"0484","t":"exposure","w":656,"h":820,"d":"May 2026"},{"id":"0483","t":"exposure slide 2","w":656,"h":820,"d":"May 2026"},{"id":"1169","t":"YOURE INVITED","w":656,"h":820,"d":"May 2026"},{"id":"1144","t":"18uuu","w":656,"h":820,"d":"May 2026"},{"id":"0153","t":"GIRLS FLAG","w":656,"h":820,"d":"May 2026"},{"id":"1024","t":"15u ranks","w":656,"h":820,"d":"May 2026"},{"id":"1039","t":"ranks 15u","w":656,"h":820,"d":"May 2026"},{"id":"1022","t":"13u ranks","w":656,"h":820,"d":"May 2026"},{"id":"1021","t":"13u rank","w":656,"h":820,"d":"May 2026"},{"id":"1038","t":"ranks 14u","w":656,"h":820,"d":"May 2026"},{"id":"1040","t":"ranks fixed","w":656,"h":820,"d":"May 2026"},{"id":"1123","t":"14U RSNKS","w":656,"h":820,"d":"May 2026"},{"id":"1020","t":"12u ranksss","w":656,"h":820,"d":"May 2026"},{"id":"1046","t":"updated rank","w":656,"h":820,"d":"May 2026"},{"id":"1031","t":"RANKINGS","w":656,"h":820,"d":"Apr 2026"},{"id":"1036","t":"rankings bea","w":656,"h":820,"d":"Apr 2026"},{"id":"0064","t":"ANNOUNCEMENT","w":656,"h":820,"d":"Apr 2026"},{"id":"1028","t":"7v7 by the numbers","w":656,"h":820,"d":"Apr 2026"},{"id":"1030","t":"BY THE NUMBERS","w":656,"h":820,"d":"Apr 2026"},{"id":"1062","t":"thank you-Recovered","w":656,"h":820,"d":"Apr 2026"},{"id":"0063","t":"ANNOUNCEMENT","w":656,"h":820,"d":"Apr 2026"},{"id":"1057","t":"Untitled-3","w":656,"h":820,"d":"Apr 2026"},{"id":"1212","t":"two tourneys one weeeknd","w":656,"h":820,"d":"Apr 2026"},{"id":"0075","t":"BEA7","w":820,"h":461,"d":"Apr 2026"},{"id":"1211","t":"two tourneys one weeeknd","w":656,"h":820,"d":"Apr 2026"},{"id":"0931","t":"whos next","w":656,"h":820,"d":"Apr 2026"},{"id":"0841","t":"statement","w":656,"h":820,"d":"Apr 2026"},{"id":"0449","t":"denmark","w":656,"h":820,"d":"Apr 2026"},{"id":"0864","t":"teams","w":656,"h":820,"d":"Apr 2026"},{"id":"0327","t":"atl 7v7 pop out","w":656,"h":820,"d":"Apr 2026"},{"id":"0745","t":"popout","w":656,"h":820,"d":"Mar 2026"},{"id":"1182","t":"central florida clash 1","w":656,"h":820,"d":"Mar 2026"},{"id":"1220","t":"zilla zoo 12u","w":656,"h":820,"d":"Mar 2026"},{"id":"1141","t":"18u gsp 3 30","w":656,"h":820,"d":"Mar 2026"},{"id":"0856","t":"supreme elite","w":656,"h":820,"d":"Mar 2026"},{"id":"1168","t":"TEAM GSP 14U","w":656,"h":820,"d":"Mar 2026"},{"id":"1204","t":"hustle inc 13u","w":656,"h":820,"d":"Mar 2026"},{"id":"0698","t":"mt final","w":656,"h":820,"d":"Mar 2026"},{"id":"0166","t":"HEADLINES","w":656,"h":820,"d":"Mar 2026"},{"id":"1132","t":"18U 3 27","w":656,"h":820,"d":"Mar 2026"},{"id":"1122","t":"14U 3 27","w":656,"h":820,"d":"Mar 2026"},{"id":"1119","t":"13U 3 27","w":656,"h":820,"d":"Mar 2026"},{"id":"1114","t":"10 3 27","w":656,"h":820,"d":"Mar 2026"},{"id":"1164","t":"PEEWEE 3 27","w":656,"h":820,"d":"Mar 2026"},{"id":"0904","t":"two t","w":656,"h":820,"d":"Mar 2026"},{"id":"0099","t":"CFC","w":656,"h":820,"d":"Mar 2026"},{"id":"1189","t":"free bid","w":656,"h":820,"d":"Mar 2026"},{"id":"0013","t":"18","w":656,"h":820,"d":"Mar 2026"},{"id":"0011","t":"14","w":656,"h":820,"d":"Mar 2026"},{"id":"0008","t":"13","w":656,"h":820,"d":"Mar 2026"},{"id":"0007","t":"12","w":656,"h":820,"d":"Mar 2026"},{"id":"0005","t":"11","w":656,"h":820,"d":"Mar 2026"},{"id":"0003","t":"10","w":656,"h":820,"d":"Mar 2026"},{"id":"0055","t":"9","w":656,"h":820,"d":"Mar 2026"},{"id":"0053","t":"8","w":656,"h":820,"d":"Mar 2026"},{"id":"0046","t":"7","w":656,"h":820,"d":"Mar 2026"},{"id":"0043","t":"6","w":656,"h":820,"d":"Mar 2026"},{"id":"0042","t":"5","w":656,"h":820,"d":"Mar 2026"},{"id":"0037","t":"4","w":656,"h":820,"d":"Mar 2026"},{"id":"0036","t":"3","w":656,"h":820,"d":"Mar 2026"},{"id":"0023","t":"2","w":656,"h":820,"d":"Mar 2026"},{"id":"0002","t":"1","w":656,"h":820,"d":"Mar 2026"},{"id":"0132","t":"ELEVATE","w":656,"h":820,"d":"Mar 2026"},{"id":"0054","t":"863","w":656,"h":820,"d":"Mar 2026"},{"id":"0230","t":"PAL STORM","w":656,"h":820,"d":"Mar 2026"},{"id":"0731","t":"paradise city free","w":656,"h":820,"d":"Mar 2026"},{"id":"0212","t":"MID GEORGIA AGIC","w":656,"h":820,"d":"Mar 2026"},{"id":"1161","t":"HUSTLE INC FREE BID","w":656,"h":820,"d":"Mar 2026"},{"id":"0241","t":"REV UNITEDDD","w":656,"h":820,"d":"Mar 2026"},{"id":"0262","t":"SUPREME ELITE REE","w":656,"h":820,"d":"Mar 2026"},{"id":"0201","t":"LAST ONES LAUGHING","w":656,"h":820,"d":"Mar 2026"},{"id":"0196","t":"LAKE ALFRED FRE","w":656,"h":820,"d":"Mar 2026"},{"id":"0186","t":"JUST THROW","w":656,"h":820,"d":"Mar 2026"},{"id":"0205","t":"LKE ALFRED FRE","w":656,"h":820,"d":"Mar 2026"},{"id":"0200","t":"LAST ONES LAUGHING FRE BID","w":656,"h":820,"d":"Mar 2026"},{"id":"0264","t":"TAC OPS FREE","w":656,"h":820,"d":"Mar 2026"},{"id":"0274","t":"TREIGNED LEGENDS","w":656,"h":820,"d":"Mar 2026"},{"id":"0295","t":"ZONE 6","w":656,"h":820,"d":"Mar 2026"},{"id":"0293","t":"YOG SELECT","w":656,"h":820,"d":"Mar 2026"},{"id":"0235","t":"PLAYMAKERS FREE","w":656,"h":820,"d":"Mar 2026"},{"id":"1307","t":"SOITHSIDE STRIKERS FREE BID","w":656,"h":820,"d":"Mar 2026"},{"id":"1302","t":"KTOWN DUCKS FREE BID","w":656,"h":820,"d":"Mar 2026"},{"id":"1297","t":"AFTERMATH FREE BID","w":656,"h":820,"d":"Mar 2026"},{"id":"1299","t":"BACKYARD BOYZ","w":656,"h":820,"d":"Mar 2026"},{"id":"0256","t":"SOUTHSIDE STRIKERS","w":656,"h":820,"d":"Mar 2026"},{"id":"1300","t":"BARTOW FREEEEEE","w":656,"h":820,"d":"Mar 2026"},{"id":"1304","t":"LG SKYTRIBE FREE","w":656,"h":820,"d":"Mar 2026"},{"id":"1309","t":"elevate storm free","w":656,"h":820,"d":"Mar 2026"},{"id":"1298","t":"AVON PARK FREE","w":656,"h":820,"d":"Mar 2026"},{"id":"1303","t":"LEGACY DAWGS FREE BID","w":656,"h":820,"d":"Mar 2026"},{"id":"1306","t":"NXTGEN FREE BID","w":656,"h":820,"d":"Mar 2026"},{"id":"1301","t":"EPA ACADEMY FREE BID","w":656,"h":820,"d":"Mar 2026"},{"id":"1308","t":"TEAM GSP FREE BID","w":656,"h":820,"d":"Mar 2026"},{"id":"1305","t":"MONEYTEAM FREE BID","w":656,"h":820,"d":"Mar 2026"},{"id":"0342","t":"bea playmaker","w":656,"h":820,"d":"Mar 2026"},{"id":"0078","t":"BG","w":656,"h":820,"d":"Mar 2026"},{"id":"1188","t":"free bid","w":656,"h":820,"d":"Mar 2026"},{"id":"1150","t":"BEA SHOWDOWN CHAMPS copy","w":656,"h":820,"d":"Mar 2026"},{"id":"0869","t":"thank you","w":656,"h":820,"d":"Mar 2026"},{"id":"0871","t":"thanks copy","w":656,"h":820,"d":"Mar 2026"},{"id":"0868","t":"thank you","w":656,"h":820,"d":"Mar 2026"},{"id":"0222","t":"OLDS","w":656,"h":820,"d":"Mar 2026"},{"id":"0145","t":"FREDRICK BROWN","w":656,"h":820,"d":"Mar 2026"},{"id":"0108","t":"CLINTON","w":656,"h":820,"d":"Mar 2026"},{"id":"0254","t":"SHAWN","w":656,"h":820,"d":"Mar 2026"},{"id":"0082","t":"BRANDON","w":656,"h":820,"d":"Mar 2026"},{"id":"0207","t":"MAJOR","w":656,"h":820,"d":"Mar 2026"},{"id":"0294","t":"ZAYDEN BROOKS","w":656,"h":820,"d":"Mar 2026"},{"id":"0159","t":"GRANT ZWER","w":656,"h":820,"d":"Mar 2026"},{"id":"0059","t":"AJ WILLIAMS","w":656,"h":820,"d":"Mar 2026"},{"id":"0151","t":"GIORGIO","w":656,"h":820,"d":"Mar 2026"},{"id":"0117","t":"DABRIEL","w":656,"h":820,"d":"Mar 2026"},{"id":"0221","t":"NYAJA","w":656,"h":820,"d":"Mar 2026"},{"id":"0172","t":"JACORIE ADAMS","w":656,"h":820,"d":"Mar 2026"},{"id":"0123","t":"DEKARI","w":656,"h":820,"d":"Mar 2026"},{"id":"0126","t":"DERRICK OSBORNE","w":656,"h":820,"d":"Mar 2026"},{"id":"0436","t":"damari graves","w":656,"h":820,"d":"Mar 2026"},{"id":"1148","t":"AFTERMATH 15U","w":656,"h":820,"d":"Mar 2026"},{"id":"1183","t":"cfc 14u","w":656,"h":820,"d":"Mar 2026"},{"id":"1181","t":"central florida clash 1","w":656,"h":820,"d":"Mar 2026"},{"id":"0263","t":"T2 PLAYMAKER","w":656,"h":820,"d":"Mar 2026"},{"id":"0098","t":"CFC","w":656,"h":820,"d":"Mar 2026"},{"id":"1019","t":"12U KEY MATCHUPS","w":656,"h":820,"d":"Mar 2026"},{"id":"1160","t":"HEADLINES 15U BEA","w":656,"h":820,"d":"Mar 2026"},{"id":"1135","t":"18U HEADLINERS BEA","w":656,"h":820,"d":"Mar 2026"},{"id":"1172","t":"bea central florida headliners 14u","w":656,"h":820,"d":"Mar 2026"},{"id":"0345","t":"bea spring","w":656,"h":820,"d":"Mar 2026"},{"id":"0140","t":"FAREED","w":656,"h":820,"d":"Mar 2026"},{"id":"0124","t":"DEMARIOUS","w":656,"h":820,"d":"Mar 2026"},{"id":"0639","t":"kelijah","w":656,"h":820,"d":"Mar 2026"},{"id":"0062","t":"AMARION","w":656,"h":820,"d":"Mar 2026"},{"id":"0187","t":"KAMORIOUS","w":656,"h":820,"d":"Mar 2026"},{"id":"0176","t":"JARVIS H","w":656,"h":820,"d":"Mar 2026"},{"id":"0107","t":"CLARENCE","w":656,"h":820,"d":"Mar 2026"},{"id":"0119","t":"DANDRE","w":656,"h":820,"d":"Mar 2026"},{"id":"0177","t":"JAYDEN CYPHERS","w":656,"h":820,"d":"Mar 2026"},{"id":"0188","t":"KE'MARI MITCHELL","w":656,"h":820,"d":"Mar 2026"},{"id":"1149","t":"BEA SHOWDOWN CHAMPS copy","w":656,"h":820,"d":"Mar 2026"},{"id":"1165","t":"SPRING TAKEOFF 15U","w":656,"h":820,"d":"Mar 2026"},{"id":"0344","t":"bea spring","w":656,"h":820,"d":"Mar 2026"},{"id":"1152","t":"BEA SHOWDOWN CHAMPS","w":656,"h":820,"d":"Feb 2026"},{"id":"1140","t":"18u champs dixie","w":656,"h":820,"d":"Feb 2026"},{"id":"1187","t":"dixie hustle 15u","w":656,"h":820,"d":"Feb 2026"},{"id":"1167","t":"TAC ops 14u","w":656,"h":820,"d":"Feb 2026"},{"id":"1186","t":"dixie hustle 10u","w":656,"h":820,"d":"Feb 2026"},{"id":"1118","t":"12u","w":656,"h":820,"d":"Feb 2026"},{"id":"1208","t":"legacy13u","w":656,"h":820,"d":"Feb 2026"},{"id":"1147","t":"9u gsp","w":656,"h":820,"d":"Feb 2026"},{"id":"1159","t":"GSP 14U","w":656,"h":820,"d":"Feb 2026"},{"id":"1162","t":"MONEYTEAM 10U","w":656,"h":820,"d":"Feb 2026"},{"id":"0567","t":"hustle inc","w":656,"h":820,"d":"Feb 2026"},{"id":"0688","t":"media pass","w":656,"h":820,"d":"Feb 2026"},{"id":"0919","t":"v2","w":656,"h":820,"d":"Feb 2026"},{"id":"0870","t":"thank you","w":656,"h":820,"d":"Feb 2026"},{"id":"1115","t":"10U","w":656,"h":820,"d":"Feb 2026"},{"id":"0232","t":"PEEWEE","w":656,"h":820,"d":"Feb 2026"},{"id":"1136","t":"18U","w":656,"h":820,"d":"Feb 2026"},{"id":"1124","t":"14U","w":656,"h":820,"d":"Feb 2026"},{"id":"0725","t":"option 2","w":656,"h":820,"d":"Feb 2026"},{"id":"1120","t":"13U","w":656,"h":820,"d":"Feb 2026"},{"id":"0556","t":"headliners","w":656,"h":820,"d":"Feb 2026"},{"id":"0715","t":"no trophy","w":656,"h":820,"d":"Feb 2026"},{"id":"0863","t":"teams","w":656,"h":820,"d":"Feb 2026"},{"id":"0211","t":"MEDIA PASS 2","w":656,"h":820,"d":"Feb 2026"},{"id":"0250","t":"SEMAJ WILLIAMS","w":656,"h":820,"d":"Feb 2026"},{"id":"0096","t":"CASH GLOVER","w":656,"h":820,"d":"Feb 2026"},{"id":"0296","t":"ZYKING","w":656,"h":820,"d":"Feb 2026"},{"id":"0251","t":"SEMAJWILLIAMS","w":656,"h":820,"d":"Feb 2026"},{"id":"0083","t":"BRANTLEY SNYDER","w":656,"h":820,"d":"Feb 2026"},{"id":"0100","t":"CHACE SMITH","w":656,"h":820,"d":"Feb 2026"},{"id":"0170","t":"ISAAC JOHNSON","w":656,"h":820,"d":"Feb 2026"},{"id":"0318","t":"andrew gonzalez","w":656,"h":820,"d":"Feb 2026"},{"id":"0128","t":"DORIAN THOMAS","w":656,"h":820,"d":"Feb 2026"},{"id":"0137","t":"Ean williamson","w":656,"h":820,"d":"Feb 2026"},{"id":"0291","t":"XZAVIER BOONE","w":656,"h":820,"d":"Feb 2026"},{"id":"0195","t":"Karter Richardson","w":656,"h":820,"d":"Feb 2026"},{"id":"0190","t":"KG WATLEY","w":656,"h":820,"d":"Feb 2026"},{"id":"0640","t":"kemaury lampkin","w":656,"h":820,"d":"Feb 2026"},{"id":"0880","t":"tonio Ricen","w":656,"h":820,"d":"Feb 2026"},{"id":"0341","t":"bea playmaker","w":656,"h":820,"d":"Feb 2026"},{"id":"0339","t":"bea playmaker ALT","w":656,"h":820,"d":"Feb 2026"},{"id":"0340","t":"bea playmaker unblur","w":656,"h":820,"d":"Feb 2026"}]},{"id":"g1788638300707","name":"GAC","color":"#16a085","count":119,"cover":["1195","0070","1190","0165"],"items":[{"id":"1199","t":"gameday wesleyan","w":656,"h":820,"d":"May 2026"},{"id":"0519","t":"gac baseball","w":656,"h":820,"d":"May 2026"},{"id":"1195","t":"gameday may 1","w":656,"h":820,"d":"May 2026"},{"id":"0161","t":"GROUP SIGNNN","w":656,"h":820,"d":"Apr 2026"},{"id":"0202","t":"LEDGER KKKKK","w":656,"h":820,"d":"Apr 2026"},{"id":"0182","t":"JG333","w":656,"h":820,"d":"Apr 2026"},{"id":"0303","t":"adam www","w":656,"h":820,"d":"Apr 2026"},{"id":"0579","t":"jack g","w":656,"h":820,"d":"Apr 2026"},{"id":"0138","t":"Elijah","w":656,"h":820,"d":"Apr 2026"},{"id":"0175","t":"JAMES SOREN","w":656,"h":820,"d":"Apr 2026"},{"id":"0173","t":"JADEN","w":656,"h":820,"d":"Apr 2026"},{"id":"1081","t":"MARGO PRITCHARD SIGN","w":656,"h":820,"d":"Apr 2026"},{"id":"1079","t":"CYD PACE SIGN","w":656,"h":820,"d":"Apr 2026"},{"id":"0125","t":"DENZELL WATKINS SIGNEDDDD","w":656,"h":820,"d":"Apr 2026"},{"id":"0240","t":"REID","w":656,"h":820,"d":"Apr 2026"},{"id":"1090","t":"jermani sign","w":656,"h":820,"d":"Apr 2026"},{"id":"0213","t":"MILES TROJ","w":656,"h":820,"d":"Apr 2026"},{"id":"1080","t":"IAN COBBS SIGN","w":656,"h":820,"d":"Apr 2026"},{"id":"1089","t":"jared signed","w":656,"h":820,"d":"Apr 2026"},{"id":"0247","t":"SCHEDULE","w":656,"h":820,"d":"Apr 2026"},{"id":"1192","t":"gameday baseball","w":656,"h":820,"d":"Apr 2026"},{"id":"0070","t":"BASEBALL","w":656,"h":820,"d":"Apr 2026"},{"id":"0563","t":"honoring","w":656,"h":820,"d":"Apr 2026"},{"id":"0155","t":"GIRLS LAX","w":656,"h":820,"d":"Mar 2026"},{"id":"0525","t":"gbca","w":656,"h":820,"d":"Mar 2026"},{"id":"0203","t":"LEDGER","w":656,"h":820,"d":"Mar 2026"},{"id":"0335","t":"baer","w":656,"h":820,"d":"Mar 2026"},{"id":"0300","t":"academic","w":820,"h":461,"d":"Mar 2026"},{"id":"0163","t":"GWINEET","w":820,"h":461,"d":"Mar 2026"},{"id":"0317","t":"all state","w":820,"h":461,"d":"Mar 2026"},{"id":"0281","t":"TWEET","w":656,"h":820,"d":"Mar 2026"},{"id":"0192","t":"KHALIF","w":656,"h":820,"d":"Mar 2026"},{"id":"0314","t":"all euyes","w":656,"h":820,"d":"Mar 2026"},{"id":"0141","t":"FINAL 4","w":656,"h":820,"d":"Mar 2026"},{"id":"0311","t":"all euyes copy 1920x1080","w":820,"h":461,"d":"Mar 2026"},{"id":"0316","t":"all region","w":656,"h":820,"d":"Mar 2026"},{"id":"0134","t":"ELITE 8","w":656,"h":820,"d":"Mar 2026"},{"id":"0337","t":"basketball","w":656,"h":820,"d":"Feb 2026"},{"id":"0537","t":"girls bbl","w":656,"h":820,"d":"Feb 2026"},{"id":"0375","t":"bsbl","w":656,"h":820,"d":"Feb 2026"},{"id":"1158","t":"GAMEDAYYY","w":656,"h":820,"d":"Feb 2026"},{"id":"1061","t":"golf-Recovered","w":656,"h":820,"d":"Feb 2026"},{"id":"0369","t":"brady","w":656,"h":820,"d":"Feb 2026"},{"id":"0584","t":"jason","w":656,"h":820,"d":"Feb 2026"},{"id":"0418","t":"claire","w":656,"h":820,"d":"Feb 2026"},{"id":"0407","t":"charlie","w":656,"h":820,"d":"Jan 2026"},{"id":"0472","t":"ella","w":656,"h":820,"d":"Jan 2026"},{"id":"0680","t":"margo p","w":656,"h":820,"d":"Jan 2026"},{"id":"0255","t":"SKYLAR","w":656,"h":820,"d":"Jan 2026"},{"id":"0641","t":"kemp","w":656,"h":820,"d":"Jan 2026"},{"id":"0542","t":"golf","w":656,"h":820,"d":"Jan 2026"},{"id":"0158","t":"GRAHAM2","w":656,"h":820,"d":"Dec 2025"},{"id":"1008","t":"ledgemock","w":820,"h":461,"d":"Dec 2025"},{"id":"0194","t":"KJ","w":820,"h":461,"d":"Dec 2025"},{"id":"0127","t":"DJ","w":820,"h":461,"d":"Dec 2025"},{"id":"0115","t":"CW","w":820,"h":461,"d":"Dec 2025"},{"id":"0668","t":"ledger1","w":820,"h":461,"d":"Dec 2025"},{"id":"0448","t":"dejnz","w":656,"h":820,"d":"Dec 2025"},{"id":"0179","t":"JEREMY","w":656,"h":820,"d":"Dec 2025"},{"id":"0302","t":"adam wharton","w":656,"h":820,"d":"Dec 2025"},{"id":"0785","t":"round 4","w":656,"h":820,"d":"Dec 2025"},{"id":"0403","t":"cha","w":656,"h":820,"d":"Nov 2025"},{"id":"0243","t":"ROE","w":656,"h":820,"d":"Nov 2025"},{"id":"0071","t":"BB","w":656,"h":820,"d":"Nov 2025"},{"id":"0602","t":"jjgr","w":656,"h":820,"d":"Nov 2025"},{"id":"0282","t":"TY","w":656,"h":820,"d":"Nov 2025"},{"id":"0259","t":"SQ","w":656,"h":820,"d":"Nov 2025"},{"id":"1190","t":"gameday 11:20","w":656,"h":820,"d":"Nov 2025"},{"id":"0872","t":"thanks","w":656,"h":820,"d":"Nov 2025"},{"id":"0034","t":"2nd one","w":656,"h":820,"d":"Nov 2025"},{"id":"0629","t":"jumbo","w":820,"h":461,"d":"Nov 2025"},{"id":"0966","t":"devin (Downloads)","w":656,"h":820,"d":"Nov 2025"},{"id":"0638","t":"kalif","w":656,"h":820,"d":"Nov 2025"},{"id":"0701","t":"myles","w":656,"h":820,"d":"Nov 2025"},{"id":"0441","t":"davis","w":656,"h":820,"d":"Nov 2025"},{"id":"0453","t":"devin","w":656,"h":820,"d":"Nov 2025"},{"id":"0438","t":"darius","w":656,"h":820,"d":"Nov 2025"},{"id":"0412","t":"christian","w":656,"h":820,"d":"Nov 2025"},{"id":"1095","t":"signed","w":656,"h":820,"d":"Nov 2025"},{"id":"0410","t":"chloe boyce","w":656,"h":820,"d":"Nov 2025"},{"id":"0324","t":"arya khalaf","w":656,"h":820,"d":"Nov 2025"},{"id":"0397","t":"camryn","w":656,"h":820,"d":"Nov 2025"},{"id":"0858","t":"sydni hope","w":656,"h":820,"d":"Nov 2025"},{"id":"0647","t":"kinsleigh","w":656,"h":820,"d":"Nov 2025"},{"id":"0707","t":"new full","w":656,"h":820,"d":"Nov 2025"},{"id":"0512","t":"full","w":656,"h":820,"d":"Nov 2025"},{"id":"0094","t":"CAROLINE","w":656,"h":820,"d":"Nov 2025"},{"id":"0116","t":"CYD","w":656,"h":820,"d":"Nov 2025"},{"id":"0271","t":"TODE","w":656,"h":820,"d":"Nov 2025"},{"id":"0320","t":"angel","w":656,"h":820,"d":"Nov 2025"},{"id":"0184","t":"JTODE","w":656,"h":820,"d":"Nov 2025"},{"id":"0435","t":"cycd","w":656,"h":820,"d":"Nov 2025"},{"id":"0666","t":"leah","w":656,"h":820,"d":"Nov 2025"},{"id":"0580","t":"jacobt","w":656,"h":820,"d":"Nov 2025"},{"id":"0820","t":"signedamyra","w":656,"h":820,"d":"Nov 2025"},{"id":"1093","t":"signed copy","w":656,"h":820,"d":"Nov 2025"},{"id":"0393","t":"cam","w":656,"h":820,"d":"Nov 2025"},{"id":"0559","t":"hermle","w":656,"h":820,"d":"Nov 2025"},{"id":"0516","t":"gabe","w":656,"h":820,"d":"Nov 2025"},{"id":"0446","t":"deji","w":656,"h":820,"d":"Nov 2025"},{"id":"0165","t":"HALLOW","w":656,"h":820,"d":"Nov 2025"},{"id":"0376","t":"bskbl","w":656,"h":820,"d":"Nov 2025"},{"id":"1194","t":"gameday hallloween","w":656,"h":820,"d":"Oct 2025"},{"id":"0792","t":"school record","w":656,"h":820,"d":"Oct 2025"},{"id":"0004","t":"10:17","w":656,"h":820,"d":"Oct 2025"},{"id":"1202","t":"gameday10 23","w":656,"h":820,"d":"Oct 2025"},{"id":"1005","t":"logo1920x1080","w":820,"h":461,"d":"Oct 2025"},{"id":"1006","t":"logos","w":656,"h":820,"d":"Oct 2025"},{"id":"0965","t":"cjstat","w":656,"h":820,"d":"Sep 2025"},{"id":"0962","t":"SENIOR NIGHT","w":656,"h":820,"d":"Sep 2025"},{"id":"0964","t":"ari","w":656,"h":820,"d":"Sep 2025"},{"id":"0963","t":"Untitled-1","w":656,"h":820,"d":"Sep 2025"},{"id":"0970","t":"jscott","w":656,"h":820,"d":"Sep 2025"},{"id":"0957","t":"Adrien","w":656,"h":820,"d":"Sep 2025"},{"id":"0960","t":"PDUB","w":656,"h":820,"d":"Sep 2025"},{"id":"0968","t":"gameday","w":656,"h":820,"d":"Sep 2025"},{"id":"0959","t":"MAX MUELLER","w":656,"h":820,"d":"Aug 2025"},{"id":"0961","t":"PLAYER OF THE WEEK TEMPLAYTE","w":656,"h":820,"d":"Aug 2025"},{"id":"0981","t":"will hardy","w":656,"h":820,"d":"Aug 2025"}]},{"id":"g1788638739516","name":"STREAMER GRAPHICS","color":"#8e44ad","count":72,"cover":["1365","1324"],"items":[{"id":"1367","t":"motion 1367","w":820,"h":461,"d":"Sep 2026","v":1},{"id":"1368","t":"fulest","w":820,"h":512,"d":"Sep 2026","v":1},{"id":"1365","t":"NITRO CAMDEN X DESHAE FROST","w":656,"h":820,"d":"Sep 2026"},{"id":"1233","t":"bonding out baddies 2","w":820,"h":461,"d":"Sep 2026"},{"id":"1326","t":"reggie thumbnail","w":820,"h":461,"d":"Sep 2026"},{"id":"1312","t":"nitrooooo","w":656,"h":820,"d":"Sep 2026"},{"id":"0992","t":"HITATHN 2","w":656,"h":820,"d":"Sep 2026"},{"id":"1224","t":"adin ross x nitro cam","w":656,"h":820,"d":"Sep 2026"},{"id":"0948","t":"24 HOUR","w":656,"h":820,"d":"Sep 2026"},{"id":"0998","t":"LOVE","w":656,"h":820,"d":"Sep 2026"},{"id":"0950","t":"24h statssssss","w":656,"h":820,"d":"Aug 2026"},{"id":"1340","t":"stream watchparty","w":656,"h":820,"d":"Aug 2026"},{"id":"1286","t":"home alone","w":656,"h":820,"d":"Aug 2026"},{"id":"1323","t":"r","w":820,"h":461,"d":"Aug 2026"},{"id":"1347","t":"thumbnail 1","w":820,"h":461,"d":"Aug 2026"},{"id":"1324","t":"raud x reggie","w":656,"h":820,"d":"Aug 2026"},{"id":"1332","t":"sc state","w":656,"h":820,"d":"Aug 2026"},{"id":"1014","t":"POOOL","w":656,"h":820,"d":"Aug 2026"},{"id":"1328","t":"reggie x cam","w":656,"h":820,"d":"Aug 2026"},{"id":"1336","t":"song wars","w":656,"h":820,"d":"Aug 2026"},{"id":"1235","t":"boosie","w":656,"h":820,"d":"Aug 2026"},{"id":"1313","t":"noneckjay","w":656,"h":820,"d":"Aug 2026"},{"id":"1015","t":"PROD WATER WARS","w":656,"h":820,"d":"Aug 2026"},{"id":"0988","t":"HIDE AND SEEK","w":656,"h":820,"d":"Aug 2026"},{"id":"1107","t":"streamer prom","w":656,"h":820,"d":"Aug 2026"},{"id":"0378","t":"bts","w":656,"h":820,"d":"Aug 2026"},{"id":"1109","t":"streamerprom","w":656,"h":820,"d":"Aug 2026"},{"id":"0106","t":"CJnew intro","w":820,"h":461,"d":"Aug 2026"},{"id":"0528","t":"ggathon stats","w":656,"h":820,"d":"Aug 2026"},{"id":"0714","t":"nickryan","w":656,"h":820,"d":"Aug 2026"},{"id":"0025","t":"24 hour stats","w":656,"h":820,"d":"Aug 2026"},{"id":"0777","t":"reggies plug","w":820,"h":273,"d":"Aug 2026"},{"id":"0372","t":"bright","w":820,"h":461,"d":"Aug 2026"},{"id":"0549","t":"haitians up","w":656,"h":820,"d":"Aug 2026"},{"id":"0402","t":"cgi","w":820,"h":461,"d":"Aug 2026"},{"id":"0027","t":"24HOURS AT THE CLOVER HOUSE","w":656,"h":820,"d":"Aug 2026"},{"id":"0084","t":"BREAKDANCE","w":656,"h":820,"d":"Aug 2026"},{"id":"0737","t":"pool party","w":656,"h":820,"d":"Aug 2026"},{"id":"0645","t":"kingjojooo","w":820,"h":461,"d":"Jul 2026"},{"id":"0368","t":"bowling","w":656,"h":820,"d":"Jul 2026"},{"id":"0850","t":"suburb baby x jojo","w":820,"h":461,"d":"Jul 2026"},{"id":"0672","t":"logan paul x nick","w":656,"h":820,"d":"Jul 2026"},{"id":"0607","t":"jojo x mcqueen mukbang","w":820,"h":461,"d":"Jul 2026"},{"id":"0795","t":"seajayy deen and ab","w":656,"h":820,"d":"Jul 2026"},{"id":"0594","t":"jca graduation","w":656,"h":820,"d":"Jul 2026"},{"id":"0440","t":"daveron","w":656,"h":820,"d":"Jul 2026"},{"id":"0944","t":"yoboywilll","w":656,"h":820,"d":"Jul 2026"},{"id":"0219","t":"NICK","w":820,"h":461,"d":"Jul 2026"},{"id":"0473","t":"em1","w":820,"h":461,"d":"Jul 2026"},{"id":"0048","t":"72hourlive","w":656,"h":820,"d":"Jul 2026"},{"id":"0014","t":"1KARK","w":656,"h":820,"d":"Jul 2026"},{"id":"1100","t":"1k patreon","w":656,"h":820,"d":"Jul 2026"},{"id":"0651","t":"kowboy","w":656,"h":820,"d":"Jul 2026"},{"id":"0591","t":"jayven","w":656,"h":820,"d":"Jul 2026"},{"id":"0862","t":"tattoo","w":656,"h":820,"d":"Jul 2026"},{"id":"0280","t":"TT","w":656,"h":820,"d":"Jul 2026"},{"id":"0439","t":"darty","w":656,"h":820,"d":"Jul 2026"},{"id":"0650","t":"kowboy","w":656,"h":820,"d":"Jul 2026"},{"id":"0371","t":"brb","w":820,"h":461,"d":"Jul 2026"},{"id":"0831","t":"ss1","w":820,"h":461,"d":"Jul 2026"},{"id":"1099","t":"1KSTREAMERU","w":656,"h":820,"d":"Jul 2026"},{"id":"0171","t":"J2JJ","w":656,"h":820,"d":"Jul 2026"},{"id":"1180","t":"ceajayy campijng","w":656,"h":820,"d":"Jul 2026"},{"id":"0399","t":"ceejayyyy","w":656,"h":820,"d":"Jul 2026"},{"id":"0533","t":"gggggg","w":656,"h":820,"d":"Jul 2026"},{"id":"0019","t":"1kps","w":656,"h":820,"d":"Jul 2026"},{"id":"1103","t":"atl stream 3","w":656,"h":820,"d":"Jul 2026"},{"id":"0095","t":"CASCADE","w":656,"h":820,"d":"Jul 2026"},{"id":"0800","t":"seajayyyy","w":656,"h":820,"d":"Jun 2026"},{"id":"0798","t":"seajayy2","w":656,"h":820,"d":"Jun 2026"},{"id":"0592","t":"jayven1","w":656,"h":820,"d":"Jun 2026"},{"id":"0722","t":"okq1","w":656,"h":820,"d":"Jun 2026"}]},{"id":"g1788642855999","name":"FUN PROJECTS","color":"#c661e3","count":57,"cover":["1238","1293","0244","0789"],"items":[{"id":"1238","t":"ceedee","w":656,"h":820,"d":"Aug 2026"},{"id":"0996","t":"Julian","w":656,"h":820,"d":"Aug 2026"},{"id":"1311","t":"nick peal","w":656,"h":820,"d":"Aug 2026"},{"id":"1293","t":"kewan","w":656,"h":820,"d":"Aug 2026"},{"id":"1353","t":"tsmith","w":656,"h":820,"d":"Aug 2026"},{"id":"0982","t":"DQ","w":656,"h":820,"d":"Aug 2026"},{"id":"1364","t":"xd","w":656,"h":820,"d":"Aug 2026"},{"id":"0593","t":"jb","w":656,"h":820,"d":"Aug 2026"},{"id":"0451","t":"derek","w":656,"h":820,"d":"Jul 2026"},{"id":"0648","t":"kolby branch","w":656,"h":820,"d":"Jul 2026"},{"id":"0626","t":"jtatatata","w":656,"h":820,"d":"Jun 2026"},{"id":"0198","t":"LANDO V2","w":656,"h":820,"d":"May 2026"},{"id":"0197","t":"LAMELO","w":656,"h":820,"d":"May 2026"},{"id":"0114","t":"CPOTY","w":656,"h":820,"d":"Apr 2026"},{"id":"0253","t":"SHAI RETOUCH","w":656,"h":820,"d":"Apr 2026"},{"id":"0945","t":"yoshinobu","w":656,"h":820,"d":"Apr 2026"},{"id":"0244","t":"RONALD ACUNA","w":656,"h":820,"d":"Apr 2026"},{"id":"0065","t":"ANTMAN","w":656,"h":820,"d":"Apr 2026"},{"id":"0782","t":"rory","w":656,"h":820,"d":"Apr 2026"},{"id":"0628","t":"juan soto","w":656,"h":820,"d":"Apr 2026"},{"id":"0301","t":"acuna","w":656,"h":820,"d":"Mar 2026"},{"id":"0215","t":"MJ HILL","w":656,"h":820,"d":"Mar 2026"},{"id":"0143","t":"FLAGG","w":656,"h":820,"d":"Mar 2026"},{"id":"0690","t":"messi","w":656,"h":820,"d":"Mar 2026"},{"id":"0622","t":"jsmith","w":656,"h":820,"d":"Mar 2026"},{"id":"0601","t":"jjettas","w":656,"h":820,"d":"Mar 2026"},{"id":"0621","t":"jsmith","w":656,"h":820,"d":"Mar 2026"},{"id":"0665","t":"lbj","w":656,"h":820,"d":"Feb 2026"},{"id":"0855","t":"superbowl","w":656,"h":820,"d":"Feb 2026"},{"id":"0789","t":"sb","w":656,"h":820,"d":"Jan 2026"},{"id":"0836","t":"st","w":656,"h":820,"d":"Jan 2026"},{"id":"0788","t":"sb","w":656,"h":820,"d":"Jan 2026"},{"id":"0912","t":"uk","w":656,"h":820,"d":"Jan 2026"},{"id":"1048","t":"4th-Recovered","w":656,"h":820,"d":"Jan 2026"},{"id":"1064","t":"ucla-Recovered","w":656,"h":820,"d":"Jan 2026"},{"id":"0226","t":"ORE","w":656,"h":820,"d":"Jan 2026"},{"id":"1198","t":"gameday ole miss","w":656,"h":820,"d":"Jan 2026"},{"id":"0724","t":"olemiss","w":656,"h":820,"d":"Jan 2026"},{"id":"1197","t":"gameday ole miss","w":656,"h":820,"d":"Jan 2026"},{"id":"0720","t":"ohio","w":656,"h":820,"d":"Jan 2026"},{"id":"0460","t":"drake","w":656,"h":820,"d":"Dec 2025"},{"id":"0625","t":"jt","w":656,"h":820,"d":"Nov 2025"},{"id":"0443","t":"dbook","w":656,"h":820,"d":"Nov 2025"},{"id":"0816","t":"shohei","w":656,"h":820,"d":"Nov 2025"},{"id":"0656","t":"kyrie","w":656,"h":820,"d":"Nov 2025"},{"id":"0547","t":"gsw","w":656,"h":820,"d":"Nov 2025"},{"id":"1054","t":"Untitled-1","w":656,"h":820,"d":"Oct 2025"},{"id":"0586","t":"jax","w":656,"h":820,"d":"Oct 2025"},{"id":"0663","t":"lax","w":656,"h":820,"d":"Oct 2025"},{"id":"0813","t":"shai show","w":656,"h":820,"d":"Oct 2025"},{"id":"0971","t":"jsm","w":656,"h":820,"d":"Sep 2025"},{"id":"0978","t":"tenneesseevols","w":656,"h":820,"d":"Sep 2025"},{"id":"0967","t":"francisco","w":656,"h":820,"d":"Sep 2025"},{"id":"0972","t":"melo","w":656,"h":820,"d":"Sep 2025"},{"id":"0980","t":"texas","w":656,"h":820,"d":"Sep 2025"},{"id":"0979","t":"texas v ohio state","w":656,"h":820,"d":"Aug 2025"},{"id":"0974","t":"ohio state","w":656,"h":820,"d":"Aug 2025"}]},{"id":"g1788666474893","name":"STREAMER ISLAND","color":"#3ba55d","count":35,"cover":["1241"],"items":[{"id":"1341","t":"streamer island","w":656,"h":820,"d":"Sep 2026"},{"id":"1288","t":"island","w":656,"h":820,"d":"Sep 2026"},{"id":"1289","t":"isnald","w":656,"h":820,"d":"Sep 2026"},{"id":"0994","t":"HOUSE","w":656,"h":820,"d":"Sep 2026"},{"id":"1338","t":"sssssssssss","w":656,"h":820,"d":"Sep 2026"},{"id":"1331","t":"s","w":656,"h":820,"d":"Sep 2026"},{"id":"1067","t":"SPONS","w":656,"h":820,"d":"Sep 2026"},{"id":"1236","t":"cast and crew","w":656,"h":820,"d":"Sep 2026"},{"id":"1241","t":"collage stream","w":656,"h":820,"d":"Sep 2026"},{"id":"1069","t":"SUPRISE ISLAND","w":656,"h":820,"d":"Sep 2026"},{"id":"1345","t":"suprise","w":656,"h":820,"d":"Sep 2026"},{"id":"1068","t":"SPONSERS","w":656,"h":820,"d":"Sep 2026"},{"id":"0993","t":"HOST SPECIAL","w":656,"h":820,"d":"Sep 2026"},{"id":"1339","t":"stream sponsers","w":656,"h":820,"d":"Sep 2026"},{"id":"1335","t":"sill pre","w":656,"h":820,"d":"Aug 2026"},{"id":"0986","t":"FIELD","w":656,"h":820,"d":"Aug 2026"},{"id":"0955","t":"CO","w":656,"h":820,"d":"Aug 2026"},{"id":"1223","t":"ZZO","w":656,"h":820,"d":"Aug 2026"},{"id":"0984","t":"DWILL","w":656,"h":820,"d":"Aug 2026"},{"id":"0985","t":"DWILS","w":656,"h":820,"d":"Aug 2026"},{"id":"1221","t":"USIMANGO","w":656,"h":820,"d":"Aug 2026"},{"id":"1222","t":"ZYDARIUS","w":656,"h":820,"d":"Aug 2026"},{"id":"0997","t":"LILK","w":656,"h":820,"d":"Aug 2026"},{"id":"0995","t":"JOHNYHERE","w":656,"h":820,"d":"Aug 2026"},{"id":"0952","t":"BIGWIN","w":656,"h":820,"d":"Aug 2026"},{"id":"1310","t":"mya","w":656,"h":820,"d":"Aug 2026"},{"id":"1227","t":"amillo","w":656,"h":820,"d":"Aug 2026"},{"id":"1354","t":"vickayyy","w":656,"h":820,"d":"Aug 2026"},{"id":"1279","t":"emma","w":656,"h":820,"d":"Aug 2026"},{"id":"1294","t":"lesa","w":656,"h":820,"d":"Aug 2026"},{"id":"1226","t":"amber tyson","w":656,"h":820,"d":"Aug 2026"},{"id":"1295","t":"malayah","w":656,"h":820,"d":"Aug 2026"},{"id":"1333","t":"sierra sprague","w":656,"h":820,"d":"Aug 2026"},{"id":"1344","t":"streamer island","w":656,"h":820,"d":"Aug 2026"},{"id":"1342","t":"streamer island final","w":656,"h":820,"d":"Aug 2026"}]},{"id":"g1788645483994","name":"COMMITMENT","color":"#2ec7c7","count":30,"cover":["0148"],"items":[{"id":"0598","t":"jfrank","w":656,"h":820,"d":"Jun 2026"},{"id":"0606","t":"jlun","w":656,"h":820,"d":"Jun 2026"},{"id":"0148","t":"GAMER MARSHALL","w":656,"h":820,"d":"Jun 2026"},{"id":"0569","t":"ian foust","w":656,"h":820,"d":"May 2026"},{"id":"0583","t":"jake","w":656,"h":820,"d":"Apr 2026"},{"id":"0180","t":"JERMANI","w":656,"h":820,"d":"Apr 2026"},{"id":"0752","t":"ralphie","w":656,"h":820,"d":"Feb 2026"},{"id":"0110","t":"CONNOR","w":656,"h":820,"d":"Feb 2026"},{"id":"0893","t":"trent","w":656,"h":820,"d":"Feb 2026"},{"id":"0808","t":"sekou","w":656,"h":820,"d":"Feb 2026"},{"id":"0387","t":"c1","w":656,"h":820,"d":"Feb 2026"},{"id":"0551","t":"hale","w":656,"h":820,"d":"Feb 2026"},{"id":"0704","t":"ndrew","w":656,"h":820,"d":"Feb 2026"},{"id":"0773","t":"reed","w":656,"h":820,"d":"Feb 2026"},{"id":"0676","t":"malik","w":656,"h":820,"d":"Feb 2026"},{"id":"0409","t":"chill","w":656,"h":820,"d":"Feb 2026"},{"id":"0867","t":"tflounoy","w":656,"h":820,"d":"Feb 2026"},{"id":"0550","t":"hale","w":656,"h":820,"d":"Feb 2026"},{"id":"0779","t":"rhudem","w":656,"h":820,"d":"Feb 2026"},{"id":"0882","t":"toue","w":656,"h":820,"d":"Jan 2026"},{"id":"0633","t":"jun","w":656,"h":820,"d":"Jan 2026"},{"id":"0029","t":"2ND SLIDE copy","w":656,"h":820,"d":"Jan 2026"},{"id":"0389","t":"c11","w":656,"h":820,"d":"Jan 2026"},{"id":"0386","t":"c1","w":656,"h":820,"d":"Jan 2026"},{"id":"0427","t":"conn","w":656,"h":820,"d":"Dec 2025"},{"id":"0523","t":"gardener","w":656,"h":820,"d":"Dec 2025"},{"id":"0587","t":"jaxen wages","w":656,"h":820,"d":"Dec 2025"},{"id":"0699","t":"mt","w":656,"h":820,"d":"Dec 2025"},{"id":"1084","t":"chase cmmit","w":656,"h":820,"d":"Dec 2025"},{"id":"0031","t":"2ND SLIDE","w":656,"h":820,"d":"Dec 2025"}]},{"id":"g1788645303988","name":"ALL-REGION AWARDS","color":"#e0863c","count":27,"cover":["0447"],"items":[{"id":"0582","t":"jake","w":656,"h":820,"d":"Jun 2026"},{"id":"0655","t":"kyree","w":656,"h":820,"d":"Mar 2026"},{"id":"0279","t":"TSMITH2","w":656,"h":820,"d":"Jan 2026"},{"id":"0521","t":"ganand","w":656,"h":820,"d":"Jan 2026"},{"id":"0718","t":"obi","w":656,"h":820,"d":"Dec 2025"},{"id":"0447","t":"dejnz","w":656,"h":820,"d":"Dec 2025"},{"id":"0753","t":"ralpho","w":656,"h":820,"d":"Dec 2025"},{"id":"0112","t":"COOP","w":656,"h":820,"d":"Dec 2025"},{"id":"0678","t":"malik3","w":656,"h":820,"d":"Dec 2025"},{"id":"0416","t":"cj","w":656,"h":820,"d":"Dec 2025"},{"id":"0057","t":"AD2","w":656,"h":820,"d":"Dec 2025"},{"id":"0045","t":"6ix","w":656,"h":820,"d":"Dec 2025"},{"id":"0305","t":"adrein","w":656,"h":820,"d":"Dec 2025"},{"id":"0877","t":"tj","w":656,"h":820,"d":"Dec 2025"},{"id":"0613","t":"jordin","w":656,"h":820,"d":"Dec 2025"},{"id":"0825","t":"slide","w":656,"h":820,"d":"Dec 2025"},{"id":"0636","t":"justin","w":656,"h":820,"d":"Dec 2025"},{"id":"0401","t":"centen","w":656,"h":820,"d":"Dec 2025"},{"id":"0572","t":"isaac","w":656,"h":820,"d":"Dec 2025"},{"id":"0479","t":"emory1","w":656,"h":820,"d":"Dec 2025"},{"id":"0571","t":"isaac","w":656,"h":820,"d":"Dec 2025"},{"id":"0464","t":"dree","w":656,"h":820,"d":"Dec 2025"},{"id":"0806","t":"sekeo","w":656,"h":820,"d":"Dec 2025"},{"id":"0703","t":"ndan","w":656,"h":820,"d":"Dec 2025"},{"id":"1065","t":"uno-Recovered","w":656,"h":820,"d":"Dec 2025"},{"id":"0812","t":"shaffer","w":656,"h":820,"d":"Dec 2025"},{"id":"0920","t":"vasean","w":656,"h":820,"d":"Dec 2025"}]},{"id":"g1788665973189","name":"BURGER BOYZ/GIRLZ","color":"#9aa93c","count":25,"cover":["0355"],"items":[{"id":"0139","t":"FAMILY REUJNION","w":656,"h":820,"d":"Jul 2026"},{"id":"0220","t":"NNCNC","w":656,"h":820,"d":"Jul 2026"},{"id":"0535","t":"girlball","w":656,"h":820,"d":"Jun 2026"},{"id":"0355","t":"bg1","w":656,"h":820,"d":"Jun 2026"},{"id":"0354","t":"bg vs bb","w":656,"h":820,"d":"Jun 2026"},{"id":"0420","t":"coach","w":656,"h":820,"d":"Jun 2026"},{"id":"0268","t":"THAOMY","w":656,"h":820,"d":"Jun 2026"},{"id":"0267","t":"TERRIANA","w":656,"h":820,"d":"Jun 2026"},{"id":"0210","t":"MAYA","w":656,"h":820,"d":"Jun 2026"},{"id":"0135","t":"ERIYELLE","w":656,"h":820,"d":"Jun 2026"},{"id":"0246","t":"SARAH","w":656,"h":820,"d":"Jun 2026"},{"id":"0245","t":"SAMMY WILLIAMS","w":656,"h":820,"d":"Jun 2026"},{"id":"0236","t":"QUINN","w":656,"h":820,"d":"Jun 2026"},{"id":"0193","t":"KIRRA","w":656,"h":820,"d":"Jun 2026"},{"id":"0189","t":"KENNEDI FERRY","w":656,"h":820,"d":"Jun 2026"},{"id":"0156","t":"GRACE","w":656,"h":820,"d":"Jun 2026"},{"id":"0118","t":"DALTON","w":656,"h":820,"d":"Jun 2026"},{"id":"0101","t":"CHARLOTTE BROWN","w":656,"h":820,"d":"Jun 2026"},{"id":"0308","t":"alexa young","w":656,"h":820,"d":"Jun 2026"},{"id":"1173","t":"burger girlz your invited","w":656,"h":820,"d":"Jun 2026"},{"id":"0382","t":"burger thumbnail","w":820,"h":461,"d":"May 2026"},{"id":"0381","t":"burger girlz","w":656,"h":820,"d":"Apr 2026"},{"id":"0468","t":"elevateeeeeee","w":656,"h":820,"d":"Mar 2026"},{"id":"0090","t":"BURGER","w":656,"h":820,"d":"Mar 2026"},{"id":"0088","t":"BURGER BOYZ","w":656,"h":820,"d":"Mar 2026"}]},{"id":"g1788641057202","name":"7V7","color":"#5b8bff","count":23,"cover":["1145"],"items":[{"id":"0487","t":"field pss","w":656,"h":820,"d":"Mar 2026"},{"id":"0010","t":"13th","w":656,"h":820,"d":"Mar 2026"},{"id":"1171","t":"YPL SERIES","w":656,"h":820,"d":"Mar 2026"},{"id":"0679","t":"march madness","w":656,"h":820,"d":"Mar 2026"},{"id":"1035","t":"rankinga","w":656,"h":820,"d":"Mar 2026"},{"id":"1023","t":"15u rankings","w":656,"h":820,"d":"Mar 2026"},{"id":"1033","t":"matchups","w":656,"h":820,"d":"Mar 2026"},{"id":"1145","t":"18uweek","w":656,"h":820,"d":"Mar 2026"},{"id":"1127","t":"15U","w":656,"h":820,"d":"Mar 2026"},{"id":"1044","t":"ranks week 2","w":656,"h":820,"d":"Feb 2026"},{"id":"1129","t":"15u rans","w":656,"h":820,"d":"Feb 2026"},{"id":"1210","t":"southern showdown","w":656,"h":820,"d":"Feb 2026"},{"id":"0732","t":"peach state","w":656,"h":820,"d":"Feb 2026"},{"id":"1128","t":"15u next gen","w":656,"h":820,"d":"Feb 2026"},{"id":"1142","t":"18u inc","w":656,"h":820,"d":"Feb 2026"},{"id":"1209","t":"southern showdown","w":656,"h":820,"d":"Feb 2026"},{"id":"0713","t":"news","w":656,"h":820,"d":"Feb 2026"},{"id":"1042","t":"ranks week 2 18u","w":656,"h":820,"d":"Feb 2026"},{"id":"1041","t":"ranks week 2 15u","w":656,"h":820,"d":"Feb 2026"},{"id":"1133","t":"18U FINAL","w":656,"h":820,"d":"Feb 2026"},{"id":"1126","t":"15U FINAL","w":656,"h":820,"d":"Feb 2026"},{"id":"0209","t":"MATRCHUPS","w":656,"h":820,"d":"Feb 2026"},{"id":"1052","t":"RARE AIR-Recovered","w":656,"h":820,"d":"Jan 2026"}]},{"id":"g1788666327364","name":"COLLAGES","color":"#c9603f","count":20,"cover":["0759"],"items":[{"id":"1242","t":"collageeee","w":656,"h":820,"d":"Aug 2026"},{"id":"0956","t":"COLLAGE","w":656,"h":820,"d":"Aug 2026"},{"id":"1363","t":"work","w":656,"h":820,"d":"Aug 2026"},{"id":"0770","t":"recents","w":656,"h":820,"d":"Aug 2026"},{"id":"0766","t":"recent reggie graphics","w":656,"h":820,"d":"Aug 2026"},{"id":"0768","t":"recentrs","w":656,"h":820,"d":"Aug 2026"},{"id":"0769","t":"recents","w":656,"h":820,"d":"Aug 2026"},{"id":"0903","t":"tt1","w":656,"h":820,"d":"Jan 2026"},{"id":"0545","t":"grid1","w":656,"h":820,"d":"Jan 2026"},{"id":"0544","t":"grid","w":656,"h":820,"d":"Jan 2026"},{"id":"0758","t":"recap","w":656,"h":820,"d":"Jan 2026"},{"id":"0765","t":"recap8","w":656,"h":820,"d":"Jan 2026"},{"id":"0764","t":"recap7","w":656,"h":820,"d":"Jan 2026"},{"id":"0761","t":"recap4","w":656,"h":820,"d":"Jan 2026"},{"id":"0763","t":"recap6","w":656,"h":820,"d":"Jan 2026"},{"id":"0762","t":"recap5","w":656,"h":820,"d":"Jan 2026"},{"id":"0760","t":"recap3","w":656,"h":820,"d":"Jan 2026"},{"id":"0759","t":"recap2","w":656,"h":820,"d":"Jan 2026"},{"id":"0757","t":"recap","w":656,"h":820,"d":"Jan 2026"},{"id":"0767","t":"recent","w":656,"h":820,"d":"Dec 2025"}]},{"id":"g1788645655009","name":"GEMLABMARKETING","color":"#d94f9a","count":19,"cover":["0297"],"items":[{"id":"0953","t":"Bombsaway","w":656,"h":820,"d":"Aug 2026"},{"id":"1232","t":"black","w":656,"h":820,"d":"Aug 2026"},{"id":"1360","t":"white sotx","w":656,"h":820,"d":"Aug 2026"},{"id":"0297","t":"ZYON","w":656,"h":820,"d":"Aug 2026"},{"id":"0933","t":"wichita","w":656,"h":820,"d":"Aug 2026"},{"id":"0875","t":"three brands","w":656,"h":820,"d":"Aug 2026"},{"id":"0576","t":"its official","w":656,"h":820,"d":"Aug 2026"},{"id":"0805","t":"see you there","w":656,"h":820,"d":"Aug 2026"},{"id":"0705","t":"new era","w":656,"h":820,"d":"Aug 2026"},{"id":"0306","t":"aj","w":656,"h":820,"d":"Aug 2026"},{"id":"0708","t":"new","w":656,"h":820,"d":"Aug 2026"},{"id":"0539","t":"girls","w":656,"h":820,"d":"Aug 2026"},{"id":"0183","t":"JJFINAL","w":656,"h":820,"d":"Aug 2026"},{"id":"0408","t":"chfinal","w":656,"h":820,"d":"Aug 2026"},{"id":"0146","t":"GABBB","w":656,"h":820,"d":"Aug 2026"},{"id":"0136","t":"EUNICIA UPDATED","w":656,"h":820,"d":"Aug 2026"},{"id":"1216","t":"welcome utah","w":656,"h":820,"d":"Aug 2026"},{"id":"0682","t":"mark reed cover","w":656,"h":820,"d":"Aug 2026"},{"id":"0287","t":"Utah 3","w":656,"h":820,"d":"Jun 2026"}]},{"id":"g1788666190624","name":"OFFERS","color":"#7b6bd6","count":13,"cover":["0610","0503","0553"],"items":[{"id":"1349","t":"timani","w":656,"h":820,"d":"Aug 2026"},{"id":"1283","t":"g","w":656,"h":820,"d":"Aug 2026"},{"id":"0897","t":"treywa","w":656,"h":820,"d":"Jul 2026"},{"id":"0610","t":"jordan","w":656,"h":820,"d":"May 2026"},{"id":"0573","t":"isaiah","w":656,"h":820,"d":"May 2026"},{"id":"0503","t":"franckkk","w":656,"h":820,"d":"May 2026"},{"id":"0462","t":"dre cousey 555","w":656,"h":820,"d":"May 2026"},{"id":"0907","t":"tyyy","w":656,"h":820,"d":"Mar 2026"},{"id":"0471","t":"eli","w":656,"h":820,"d":"Mar 2026"},{"id":"0553","t":"havyn","w":656,"h":820,"d":"Feb 2026"},{"id":"0502","t":"franck","w":656,"h":820,"d":"Feb 2026"},{"id":"1063","t":"triston-Recovered","w":656,"h":820,"d":"Feb 2026"},{"id":"0695","t":"moo","w":656,"h":820,"d":"Jan 2026"}]},{"id":"g1788666671776","name":"SIGNED","color":"#e2b23c","count":8,"cover":["1088","0895"],"items":[{"id":"1097","t":"signing day","w":656,"h":820,"d":"May 2026"},{"id":"1088","t":"denzell signed","w":656,"h":820,"d":"Apr 2026"},{"id":"0454","t":"dexter mosley","w":656,"h":820,"d":"Apr 2026"},{"id":"0233","t":"PJ","w":656,"h":820,"d":"Dec 2025"},{"id":"0895","t":"treysmith","w":656,"h":820,"d":"Dec 2025"},{"id":"0819","t":"signe","w":656,"h":820,"d":"Dec 2025"},{"id":"0818","t":"signe","w":656,"h":820,"d":"Dec 2025"},{"id":"0927","t":"visit","w":656,"h":820,"d":"Oct 2025"}]},{"id":"g1788667040132","name":"STROUD-PACK","color":"#e5484d","count":2,"cover":["0351"],"items":[{"id":"0351","t":"ben","w":656,"h":820,"d":"Aug 2026"},{"id":"0687","t":"media creative","w":656,"h":820,"d":"Aug 2026"}]},{"id":"g1788666443968","name":"11 ALIVE NEWS","color":"#4aa3d9","count":2,"cover":["0915"],"items":[{"id":"0067","t":"ATLANTA","w":656,"h":820,"d":"Aug 2026"},{"id":"0915","t":"updated super 11","w":656,"h":820,"d":"Aug 2026"}]}];
+const REEL = [{"id":"1088","t":"denzell signed","c":"g1788666671776"},{"id":"0895","t":"treysmith","c":"g1788666671776"},{"id":"0915","t":"updated super 11","c":"g1788666443968"},{"id":"0759","t":"recap2","c":"g1788666327364"},{"id":"0610","t":"jordan","c":"g1788666190624"},{"id":"0553","t":"havyn","c":"g1788666190624"},{"id":"0503","t":"franckkk","c":"g1788666190624"},{"id":"0297","t":"ZYON","c":"g1788645655009"},{"id":"1365","t":"NITRO CAMDEN X DESHAE FROST","c":"g1788638739516"},{"id":"1324","t":"raud x reggie","c":"g1788638739516"},{"id":"1238","t":"ceedee","c":"g1788642855999"},{"id":"0244","t":"RONALD ACUNA","c":"g1788642855999"},{"id":"0789","t":"sb","c":"g1788642855999"},{"id":"1145","t":"18uweek","c":"g1788641057202"},{"id":"0447","t":"dejnz","c":"g1788645303988"},{"id":"1195","t":"gameday may 1","c":"g1788638300707"},{"id":"0070","t":"BASEBALL","c":"g1788638300707"},{"id":"1190","t":"gameday 11:20","c":"g1788638300707"},{"id":"0165","t":"HALLOW","c":"g1788638300707"},{"id":"1293","t":"kewan","c":"g1788642855999"},{"id":"1241","t":"collage stream","c":"g1788666474893"},{"id":"0351","t":"ben","c":"g1788667040132"},{"id":"0355","t":"bg1","c":"g1788665973189"},{"id":"0148","t":"GAMER MARSHALL","c":"g1788645483994"}];
+const catById = Object.fromEntries(CATS.map(c=>[c.id,c]));
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pad2 = n => String(n).padStart(2,'0');
+const THUMB = id => 'thumb/'+id+'.webp';
+const view = document.getElementById('view');
+const topbar = document.querySelector('.topbar');
+const markEl = document.getElementById('mark');
+const RM = matchMedia('(prefers-reduced-motion:reduce)');
+const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }),{rootMargin:"-8% 0px -6%"});
+
+/* ---------- scroll engine ----------
+   One rAF-throttled pass per frame. Everything that needs the layout is read in
+   the read phase at the top of tick(); the registered callbacks only ever write.
+   That ordering is what keeps this off the layout-thrashing path. */
+let sy = window.scrollY, raf = 0, DOCMAX = 1, MARKNOW = '', markCur = '', marks = [];
+const FRAME = new Set(), MEASURE = new Set();
+
+function onScroll(){ sy = window.scrollY; if(!raf) raf = requestAnimationFrame(tick); }
+function tick(){
+  raf = 0;
+  DOCMAX = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+  if(marks.length){
+    let n = marks[0].l;
+    for(const m of marks){ if(m.el.getBoundingClientRect().top <= 120) n = m.l; }
+    MARKNOW = n;
+  }
+  FRAME.forEach(fn=>{ try{ fn(); }catch(e){} });
+}
+addEventListener('scroll', onScroll, {passive:true});
+/* rAF is suspended while the tab is hidden, so scroll state goes stale on a tab
+   switch or a bfcache restore. Re-sync on the way back in. */
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) onScroll(); });
+addEventListener('pageshow', onScroll);
+let rzT; addEventListener('resize', ()=>{
+  clearTimeout(rzT);
+  rzT = setTimeout(()=>{ MEASURE.forEach(fn=>{ try{ fn(); }catch(e){} }); onScroll(); }, 140);
+});
+
+function chromeMeasure(){ marks = [...view.querySelectorAll('[data-mark]')].map(el=>({el, l:el.dataset.mark})); }
+function chromeFrame(){
+  topbar.style.setProperty('--sp', Math.min(1, sy/DOCMAX).toFixed(4));
+  if(MARKNOW !== markCur){ markCur = MARKNOW; markEl.textContent = MARKNOW; }
+}
+function resetHooks(){
+  FRAME.clear(); MEASURE.clear();
+  FRAME.add(chromeFrame); MEASURE.add(chromeMeasure);
+  document.documentElement.style.setProperty('--live','#8b7dff');
+}
+
+/* colour interpolation for the strip backdrop */
+function hex2rgb(h){
+  h = String(h).replace('#','');
+  if(h.length===3) h = h.split('').map(c=>c+c).join('');
+  return [parseInt(h.slice(0,2),16)||0, parseInt(h.slice(2,4),16)||0, parseInt(h.slice(4,6),16)||0];
+}
+function lerpHex(a,b,t){
+  const A=hex2rgb(a), B=hex2rgb(b);
+  return 'rgb('+A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(',')+')';
+}
+
+/* count-up */
+function countUp(el){
+  const to=+el.dataset.to; if(!to){return;}
+  if(RM.matches){ el.textContent=to; return; }
+  const t0=performance.now(), dur=1100;
+  (function step(t){
+    const p=Math.min((t-t0)/dur,1), e=1-Math.pow(1-p,3);
+    el.textContent=Math.round(to*e);
+    if(p<1) requestAnimationFrame(step);
+  })(t0);
+}
+
+/* router */
+function route(){
+  const m=location.hash.match(/^#\/cat\/(.+)$/);
+  resetHooks();
+  if(m && catById[m[1]]) renderCategory(catById[m[1]]);
+  else renderIndex();
+  window.scrollTo({top:0,behavior:'instant'});
+  sy=0; MEASURE.forEach(fn=>{ try{ fn(); }catch(e){} }); onScroll();
+}
+addEventListener('hashchange',route);
+document.getElementById('home').addEventListener('click',e=>{e.preventDefault();location.hash='#/';});
+
+/* ---------- ACT I: hero ---------- */
+function initHero(){
+  const hero=document.getElementById('hero'); if(!hero) return;
+  const plate=hero.querySelector('.plate img'), inner=hero.querySelector('.hero-in'), cue=hero.querySelector('.cue');
+  let H=1;
+  const measure=()=>{ H=Math.max(1,hero.offsetHeight); };
+  const frame=()=>{
+    if(RM.matches) return;
+    const p=Math.min(1,Math.max(0,sy/H));
+    plate.style.setProperty('--py',(p*H*0.12).toFixed(1)+'px');   /* 12% drift - the skill caps decorative parallax at 5-15% */
+    inner.style.setProperty('--ty',(p*-46).toFixed(1)+'px');
+    inner.style.setProperty('--to',(1-p*0.9).toFixed(3));
+    cue.style.setProperty('--co',(1-Math.min(1,p*3)).toFixed(3));
+  };
+  measure(); MEASURE.add(measure); FRAME.add(frame); frame();
+}
+
+/* ---------- ACT II: the strip ---------- */
+function initStrip(){
+  const sec=document.getElementById('strip'); if(!sec) return;
+  const stick=sec.querySelector('.strip-stick');
+  const track=sec.querySelector('.strip-track');
+  const cards=[...track.children];
+  const N=cards.length; if(!N) return;
+  const layB=sec.querySelector('.sbg.b');
+  const imgA=sec.querySelector('.sbg.a img'), imgB=layB.querySelector('img');
+  const hue=sec.querySelector('.shue'), mul=sec.querySelector('.smul');
+  const ttl=sec.querySelector('.ttl'), cnt=sec.querySelector('.cnt');
+  const open=sec.querySelector('.open'), ri=sec.querySelector('.ri');
+  const fill=sec.querySelector('.tr i');
+  let G={top:0,run:1,step:1,cardW:1,stageW:1}, cur=-1, statik=false, lastFloor=-1;
+
+  function setFocus(i){
+    cur=i; const c=CATS[i];
+    ttl.innerHTML='<span class="ln"><span>'+esc(c.name)+'</span></span>';
+    cnt.textContent=c.count+' pieces';
+    ri.textContent=pad2(i+1);
+    open.href='#/cat/'+c.id;
+    open.setAttribute('aria-label','Open set '+c.name+', '+c.count+' pieces');
+    cards.forEach((el,k)=>el.setAttribute('aria-current',k===i?'true':'false'));
+  }
+
+  function measure(){
+    /* No pin on phones or under reduced motion: the section collapses to a
+       swipeable snap rail instead. A 10-screen-tall pinned runway is the wrong
+       thing to hand a phone. */
+    statik = RM.matches || innerWidth < 900;
+    sec.classList.toggle('static',statik);
+    if(statik){
+      sec.style.height=''; sec.classList.remove('live');
+      track.style.transform='';
+      document.documentElement.style.setProperty('--live','#8b7dff');
+      if(!imgA.src) imgA.src=THUMB(CATS[0].cover[0]);
+      if(cur<0) setFocus(0);
+      return;
+    }
+    const h=innerHeight;
+    const fullH=Math.round(Math.max(160,Math.min(h*0.30,420)));
+    const cardW=Math.round(fullH*0.75);
+    const gap=Math.max(6,Math.round(cardW*0.055));
+    sec.style.setProperty('--fullh',fullH+'px');
+    sec.style.setProperty('--cardw',cardW+'px');
+    sec.style.setProperty('--sgap',gap+'px');
+    sec.style.height=(h+(N-1)*Math.round(h*0.62))+'px';
+    const r=sec.getBoundingClientRect();
+    G={top:r.top+window.scrollY, run:Math.max(1,sec.offsetHeight-h),
+       step:cardW+gap, cardW:cardW, stageW:stick.clientWidth||innerWidth};
+  }
+
+  function frame(){
+    if(statik) return;
+    const p=Math.min(1,Math.max(0,(sy-G.top)/G.run));
+    const pos=p*(N-1);
+    sec.classList.toggle('live', p>0 && p<1);
+    track.style.transform='translate3d('+(G.stageW/2-(pos*G.step+G.cardW/2)).toFixed(1)+'px,0,0)';
+    for(let i=0;i<N;i++){
+      const t=Math.max(0,1-Math.abs(i-pos));
+      const e=t*t*(3-2*t);                      /* smoothstep, so the unfurl eases into focus */
+      const st=cards[i].style;
+      st.setProperty('--cut',((1-e)*50).toFixed(2)+'%');
+      st.setProperty('--dim2',(0.18*(1-e)).toFixed(3));
+      st.setProperty('--nm',e.toFixed(3));
+    }
+    const fl=Math.min(N-1,Math.floor(pos)), fr=pos-fl, nx=Math.min(N-1,fl+1);
+    if(fl!==lastFloor){ lastFloor=fl; imgA.src=THUMB(CATS[fl].cover[0]); imgB.src=THUMB(CATS[nx].cover[0]); }
+    layB.style.setProperty('--xf',fr.toFixed(3));
+    const col=lerpHex(CATS[fl].color,CATS[nx].color,fr);
+    hue.style.backgroundColor=col; mul.style.backgroundColor=col;
+    document.documentElement.style.setProperty('--live',col);
+    fill.style.setProperty('--rp',p.toFixed(4));
+    const fo=Math.round(pos); if(fo!==cur) setFocus(fo);
+  }
+
+  measure(); MEASURE.add(measure); FRAME.add(frame); frame();
+  if(cur<0) setFocus(0);
+}
+
+/* ---------- ACT III: reel drift ---------- */
+function initReel(){
+  const r=document.getElementById('reel'); if(!r) return;
+  const d=r.querySelector('.reel-drift');
+  let T=0,H=1;
+  const measure=()=>{ const b=r.getBoundingClientRect(); T=b.top+window.scrollY; H=Math.max(1,b.height+innerHeight); };
+  const frame=()=>{
+    if(RM.matches) return;
+    const p=Math.min(1,Math.max(0,(sy+innerHeight-T)/H));
+    d.style.setProperty('--dx',((p-0.5)*-90).toFixed(1)+'px');
+  };
+  measure(); MEASURE.add(measure); FRAME.add(frame); frame();
+}
+
+/* ---------- landing ---------- */
+function renderIndex(){
+  const total=CATS.reduce((s,c)=>s+c.count,0);
+  view.innerHTML=`
+  <section class="hero" id="hero" data-mark="Top">
+    <div class="plate" aria-hidden="true">
+      <img src="img/1365.webp" alt="" fetchpriority="high" decoding="async">
+      <span class="hue"></span><span class="mul"></span><span class="wash"></span>
+    </div>
+    <div class="hero-in">
+      <div class="eyebrow"><span>Sports &middot; Streamer &middot; Brand &mdash; design archive</span></div>
+      <h1 class="big">
+        <span class="ln"><span>VISUALS</span></span>
+        <span class="ln"><span>BY <em>ROSSI</em></span></span>
+      </h1>
+      <p class="lede">Player edits, gameday campaigns, stream art and identity work for athletes, teams and creators. Everything I&rsquo;ve shipped, sorted into sets &mdash; every piece opens full-size.</p>
+      <div class="board">
+        <div class="st"><b data-to="${total}">0</b><i>Pieces</i></div>
+        <div class="st"><b data-to="${CATS.length}">0</b><i>Sets</i></div>
+        <div class="st"><b>25-26</b><i>On record</i></div>
+        <div class="st"><b>PS&middot;AE</b><i>Built in</i></div>
+      </div>
+    </div>
+    <div class="cue" aria-hidden="true"><i></i>Scroll</div>
+  </section>
+
+  <section class="reel" id="reel" data-mark="Selected">
+    <a class="rl" href="${REEL.length?('#/cat/'+REEL[0].c):'#/'}">Selected &rarr;</a>
+    <div class="reel-drift"><div class="reel-tr">${REEL.concat(REEL).map(r=>
+      `<div class="sh" data-id="${r.id}" data-c="${r.c}"><img loading="lazy" decoding="async" src="${THUMB(r.id)}" alt=""></div>`).join('')}</div></div>
+  </section>
+
+  <section class="wrap" data-mark="The sets">
+    <div class="sec-head"><span>The sets</span><span>${CATS.length} categories &middot; biggest first</span></div>
+    <div class="cats">${CATS.map((c,i)=>{
+      const cov=c.cover.slice(0,4);
+      const one=cov.length===1;
+      return `<a class="cat" href="#/cat/${c.id}" style="--gc:${c.color}">
+        <div class="cover${one?' one':''}">${cov.map(id=>`<img loading="lazy" decoding="async" src="${THUMB(id)}" alt="">`).join('')}</div>
+        <div class="cbar"></div>
+        <div class="label"><span class="idx">${pad2(i+1)}</span><span class="nm">${esc(c.name)}</span><span class="ct"><b>${c.count}</b> pieces</span></div>
+      </a>`;
+    }).join('')}</div>
+  </section>`;
+
+  view.querySelectorAll('.st b[data-to]').forEach(countUp);
+  view.querySelectorAll('.cat').forEach((r,i)=>{ r.style.animationDelay=(i%12*45)+'ms'; io.observe(r); });
+  view.querySelectorAll('.sh').forEach(s=> s.onclick=e=>{
+    e.preventDefault();
+    const c=catById[s.dataset.c]; if(!c) return;
+    openLBList(c.items, c.items.findIndex(x=>x.id===s.dataset.id), c.color);
+  });
+  initHero(); initReel();
+}
+
+/* ---------- category page ---------- */
+let grid,mcols=[],mH=[],mView=[],mCur=0,moreObs=null,curCat=null,fShape='all';
+const BATCH=30;
+function colCount(){const w=innerWidth;return w>1360?4:w>900?3:w>520?2:1;}
+function buildCols(n){grid.innerHTML="";mcols=[];mH=[];for(let i=0;i<n;i++){const d=document.createElement('div');d.className='col';grid.appendChild(d);mcols.push(d);mH.push(0);}}
+function place(node,w){let m=0;for(let i=1;i<mH.length;i++)if(mH[i]<mH[m])m=i;mcols[m].appendChild(node);mH[m]+=w;}
+function shapeOf(it){const r=it.w/it.h;return r>1.15?'wide':r<0.9?'vert':'sq';}
+function filtered(){ return fShape==='all'?curCat.items:curCat.items.filter(it=>shapeOf(it)===fShape); }
+function tile(it){
+  const a=document.createElement('div');a.className='tile'+(it.v?' vid':'');a.dataset.id=it.id;
+  const media = it.v
+    ? `<video muted loop playsinline preload="metadata" poster="${THUMB(it.id)}"><source src="vid/${it.id}.mp4" type="video/mp4"></video><span class="motion">&#9654; Motion</span>`
+    : `<img loading="lazy" decoding="async" src="${THUMB(it.id)}" alt="">`;
+  a.innerHTML=`<figure style="aspect-ratio:${it.w}/${it.h}">${media}</figure>`;
+  io.observe(a);return a;
+}
+function moreTiles(){
+  const slice=mView.slice(mCur,mCur+BATCH);
+  slice.forEach(it=>place(tile(it),it.h/it.w+0.16));
+  mCur+=slice.length;
+}
+function relayout(){
+  const shown=mCur;mCur=0;buildCols(colCount());
+  mView.slice(0,shown).forEach(it=>place(tile(it),it.h/it.w+0.16));
+  mCur=shown;
+}
+function initCatScroll(){
+  const fb=view.querySelector('.filterbar'); if(!fb) return;
+  const hero=view.querySelector('.cat-hero');
+  let HT=0;
+  const measure=()=>{ HT=hero?hero.offsetHeight:0; };
+  const frame=()=>{
+    fb.style.setProperty('--cp',Math.min(1,sy/DOCMAX).toFixed(4));
+    fb.style.setProperty('--fo', sy>HT-60?'1':'0');
+  };
+  measure(); MEASURE.add(measure); FRAME.add(frame); frame();
+}
+function renderCategory(c){
+  curCat=c;fShape='all';
+  const idx=CATS.indexOf(c);
+  view.innerHTML=`
+   <section class="cat-hero" style="--gc:${c.color}" data-mark="${esc(c.name)}">
+     <button class="back" id="back">&lsaquo; All sets</button>
+     <div class="cat-title"><span class="ci">${pad2(idx+1)}</span><h2>${esc(c.name)}</h2></div>
+     <div class="cat-sub"><span>${c.count} pieces</span><span>Newest &rarr; earliest</span></div>
+   </section>
+   <div class="filterbar" style="--gc:${c.color}">
+     <i class="prog" aria-hidden="true"></i>
+     <span class="setname">${esc(c.name)}</span>
+     <div class="filters" id="filters" role="group" aria-label="Filter by shape">
+       <button data-s="all" class="on" aria-pressed="true">All</button>
+       <button data-s="vert" aria-pressed="false">Vertical</button>
+       <button data-s="wide" aria-pressed="false">Wide</button>
+       <button data-s="sq" aria-pressed="false">Square</button>
+     </div>
+   </div>
+   <div class="grid-wrap" style="--gc:${c.color}"><div id="grid"></div><div id="sentinel" style="height:1px"></div></div>`;
+  document.getElementById('back').onclick=()=>{location.hash='';};
+  document.getElementById('filters').onclick=e=>{
+    const b=e.target.closest('button[data-s]'); if(!b) return;
+    fShape=b.dataset.s;
+    [...b.parentElement.children].forEach(x=>{
+      const on=x===b; x.classList.toggle('on',on); x.setAttribute('aria-pressed',on?'true':'false');
+    });
+    startGrid();
+  };
+  grid=document.getElementById('grid');
+  startGrid();
+  initCatScroll();
+}
+function startGrid(){
+  mView=filtered();mCur=0;buildCols(colCount());
+  grid.parentElement.querySelector('.empty')?.remove();
+  if(!mView.length){ const e=document.createElement('div');e.className='empty';e.textContent='no pieces match';grid.after(e);return; }
+  moreTiles();
+  if(moreObs)moreObs.disconnect();
+  moreObs=new IntersectionObserver(x=>{if(x[0].isIntersecting&&mCur<mView.length)moreTiles();},{rootMargin:"1200px"});
+  moreObs.observe(document.getElementById('sentinel'));
+  grid.onclick=e=>{
+    const t=e.target.closest('.tile'); if(!t) return;
+    openLBList(mView,mView.findIndex(x=>x.id===t.dataset.id),curCat.color);
+  };
+  grid.onmouseover=e=>{ const v=e.target.closest('.tile.vid')?.querySelector('video'); if(v&&v.paused) v.play().catch(()=>{}); };
+  grid.onmouseout=e=>{ const v=e.target.closest('.tile.vid')?.querySelector('video'); if(v){ v.pause(); } };
+}
+let rz;addEventListener('resize',()=>{
+  if(!grid||!document.body.contains(grid))return;
+  clearTimeout(rz);rz=setTimeout(()=>{ if(mcols.length!==colCount()) relayout(); },160);
+});
+
+/* ---------- lightbox ---------- */
+const lb=document.getElementById('lb'),lbimg=document.getElementById('lbimg'),lbvid=document.getElementById('lbvid');
+let lbList=[],lbPos=0,lbReturn=null;
+function openLBList(list,pos,color){
+  lbList=list.slice();lbPos=pos<0?0:pos;
+  lbReturn=document.activeElement;
+  document.documentElement.style.setProperty('--sig',color||'#8b7dff');
+  showLB();lb.classList.add('on');document.body.style.overflow='hidden';
+  lb.querySelector('.x').focus();
+}
+function showLB(){
+  const d=lbList[lbPos];
+  if(d.v){
+    lbimg.hidden=true; lbvid.hidden=false;
+    lbvid.src='vid/'+d.id+'.mp4'; lbvid.load(); lbvid.play().catch(()=>{});
+  } else {
+    lbvid.hidden=true; lbvid.pause(); lbvid.removeAttribute('src');
+    lbimg.hidden=false; lbimg.src='img/'+d.id+'.webp';
+  }
+  document.getElementById('lbtitle').textContent=(d.d||'')+(d.v?'  \u2014  MOTION':'');
+  document.getElementById('lbpos').textContent=pad2(lbPos+1)+' / '+pad2(lbList.length);
+}
+function closeLB(){
+  lb.classList.remove('on');document.body.style.overflow='';
+  document.documentElement.style.removeProperty('--sig');lbvid.pause();
+  if(lbReturn&&lbReturn.focus) lbReturn.focus();
+}
+function stepLB(n){lbPos=(lbPos+n+lbList.length)%lbList.length;showLB();}
+lb.querySelector('.x').onclick=closeLB;
+lb.querySelector('.prev').onclick=()=>stepLB(-1);
+lb.querySelector('.next').onclick=()=>stepLB(1);
+lb.addEventListener('click',e=>{if(e.target===lb)closeLB();});
+addEventListener('keydown',e=>{
+  if(!lb.classList.contains('on'))return;
+  if(e.key==='Escape')closeLB();
+  if(e.key==='ArrowLeft')stepLB(-1);
+  if(e.key==='ArrowRight')stepLB(1);
+});
+
+RM.addEventListener?.('change',()=>{ MEASURE.forEach(fn=>{try{fn();}catch(e){}}); onScroll(); });
+route();
+</script>
+</body>
+</html>

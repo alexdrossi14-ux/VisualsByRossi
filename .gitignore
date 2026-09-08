@@ -1,0 +1,17 @@
+# deploy = static portfolio only
+*.py
+*.json
+*.json.*
+*.bak*
+*.SAFE-*
+*.keep
+*.log
+editor.html
+preview.html
+README.txt
+.tastemaker/
+tools/
+incoming/
+manifest.json*
+curation*.json*
+_poster_*
