@@ -6,6 +6,17 @@
 <meta name="theme-color" content="#0b0b0c">
 <title>Visuals By Rossi - Design Archive</title>
 <meta name="description" content="Sports, streamer and brand graphics by Rossi - 630 pieces across 15 sets, 25-26.">
+<link rel="canonical" href="https://alexdrossi14-ux.github.io/VisualsByRossi/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Visuals By Rossi">
+<meta property="og:title" content="Visuals By Rossi — Design Archive">
+<meta property="og:description" content="Sports, streamer and brand graphics by Rossi - 630 pieces across 15 sets, 25-26.">
+<meta property="og:image" content="https://alexdrossi14-ux.github.io/VisualsByRossi/hero-bg.webp">
+<meta property="og:url" content="https://alexdrossi14-ux.github.io/VisualsByRossi/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Visuals By Rossi — Design Archive">
+<meta name="twitter:description" content="Sports, streamer and brand graphics by Rossi - 630 pieces across 15 sets, 25-26.">
+<meta name="twitter:image" content="https://alexdrossi14-ux.github.io/VisualsByRossi/hero-bg.webp">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -384,6 +395,25 @@
   #lb .x{top:18px;right:22px}
   #lb .nav{top:50%;transform:translateY(-50%);font-size:30px;padding:18px}
   #lb .prev{left:6px} #lb .next{right:6px}
+
+  /* ---------- search ---------- */
+  #search{position:fixed;inset:0;z-index:130;background:rgba(6,6,7,.88);display:none;
+    align-items:flex-start;justify-content:center;padding:clamp(18px,10vh,140px) 20px;backdrop-filter:blur(6px)}
+  #search.on{display:flex}
+  .search-box{width:100%;max-width:560px;background:var(--panel);border:1px solid var(--line-2);
+    border-radius:14px;box-shadow:0 40px 120px -30px #000;overflow:hidden}
+  #searchInput{width:100%;border:0;background:none;color:var(--ink);font-family:var(--disp);
+    font-size:clamp(18px,3vw,24px);padding:20px 22px;border-bottom:1px solid var(--line)}
+  #searchInput:focus{outline:0}
+  #searchResults{max-height:52vh;overflow:auto}
+  #searchResults a{display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding:13px 22px;font-family:var(--mono);font-size:13px;letter-spacing:.02em;
+    color:var(--dim);border-bottom:1px solid var(--line)}
+  #searchResults a b{color:var(--ink);font-family:var(--disp);font-weight:700;font-size:15px;
+    letter-spacing:0;text-transform:none}
+  #searchResults a span{color:var(--faint);text-transform:uppercase;font-size:10.5px;letter-spacing:.1em;white-space:nowrap}
+  #searchResults a:hover,#searchResults a.sel{background:var(--panel-2);color:var(--ink)}
+  #searchResults .none{padding:18px 22px;color:var(--faint);font-family:var(--mono);font-size:12px}
 </style>
 </head>
 <body>
@@ -399,6 +429,7 @@
   </a>
   <span class="mark" id="mark" aria-hidden="true"></span>
   <span class="sp"></span>
+  <button class="ig" id="searchBtn" type="button" title="Search sets (/)">Search</button>
   <button class="ig" id="shuffle" type="button" title="Open a random piece (R)">Shuffle</button>
   <a class="ig" href="https://www.instagram.com/stories/visualsbyrossi/" target="_blank" rel="noopener" title="See today's Instagram story">Story</a>
   <a class="ig" href="https://www.instagram.com/visualsbyrossi/" target="_blank" rel="noopener">Instagram</a>
@@ -421,6 +452,13 @@
     </span>
   </div>
 </footer>
+
+<div id="search" role="dialog" aria-modal="true" aria-label="Search sets">
+  <div class="search-box">
+    <input id="searchInput" type="text" placeholder="Jump to a set&hellip;" autocomplete="off" spellcheck="false">
+    <div id="searchResults"></div>
+  </div>
+</div>
 
 <div id="lb" role="dialog" aria-modal="true" aria-label="Piece viewer">
   <button class="x" aria-label="Close">&times;</button>
@@ -831,6 +869,53 @@ document.getElementById('shuffle')?.addEventListener('click',shuffleOpen);
 addEventListener('keydown',e=>{
   if(lb.classList.contains('on')||/INPUT|TEXTAREA/.test(e.target.tagName))return;
   if(e.key==='r'||e.key==='R') shuffleOpen();
+});
+
+/* ---------- search (jump to a set) ---------- */
+const search=document.getElementById('search'),searchInput=document.getElementById('searchInput'),searchResults=document.getElementById('searchResults');
+let searchSel=0,searchReturn=null;
+function searchRender(q){
+  const term=q.trim().toLowerCase();
+  const list=(term?CATS.filter(c=>c.name.toLowerCase().includes(term)):CATS);
+  searchSel=0;
+  searchResults.innerHTML = list.length
+    ? list.map((c,i)=>`<a href="#/cat/${c.id}" data-i="${i}" class="${i===0?'sel':''}"><b>${esc(c.name)}</b><span>${c.count} pieces</span></a>`).join('')
+    : `<div class="none">No sets match &ldquo;${esc(q)}&rdquo;</div>`;
+  searchResults._list=list;
+}
+function searchOpen(){
+  searchReturn=document.activeElement;
+  search.classList.add('on');searchInput.value='';searchRender('');
+  document.body.style.overflow='hidden';
+  searchInput.focus();
+}
+function searchClose(){
+  search.classList.remove('on');document.body.style.overflow='';
+  if(searchReturn&&searchReturn.focus) searchReturn.focus();
+}
+function searchMove(n){
+  const items=[...searchResults.querySelectorAll('a')]; if(!items.length)return;
+  searchSel=(searchSel+n+items.length)%items.length;
+  items.forEach((a,i)=>a.classList.toggle('sel',i===searchSel));
+  items[searchSel].scrollIntoView({block:'nearest'});
+}
+document.getElementById('searchBtn')?.addEventListener('click',searchOpen);
+searchInput?.addEventListener('input',()=>searchRender(searchInput.value));
+searchResults.addEventListener('click',e=>{ if(e.target.closest('a')) searchClose(); });
+search.addEventListener('click',e=>{ if(e.target===search) searchClose(); });
+searchInput?.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){ e.preventDefault(); searchClose(); }
+  else if(e.key==='ArrowDown'){ e.preventDefault(); searchMove(1); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); searchMove(-1); }
+  else if(e.key==='Enter'){
+    e.preventDefault();
+    const items=[...searchResults.querySelectorAll('a')]; const a=items[searchSel];
+    if(a){ location.hash='#/cat/'+(searchResults._list[searchSel]?.id||''); searchClose(); }
+  }
+});
+addEventListener('keydown',e=>{
+  if(search.classList.contains('on')||lb.classList.contains('on')||/INPUT|TEXTAREA/.test(e.target.tagName))return;
+  if(e.key==='/'){ e.preventDefault(); searchOpen(); }
 });
 
 RM.addEventListener?.('change',()=>{ MEASURE.forEach(fn=>{try{fn();}catch(e){}}); onScroll(); });
